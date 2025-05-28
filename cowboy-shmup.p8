@@ -1,9 +1,26 @@
 pico-8 cartridge // http://www.pico-8.com
 version 42
 __lua__
+#include pecs/pecs.lua
 #include pico-badger/pico-badger.lua
+#include src/components.lua
+#include src/game.lua
 
-print('nothing here yet!')
+function _init()
+
+    g:initialiseGame()
+end
+
+function _update60()
+
+    g:update(1/60)
+end
+
+function _draw()
+
+    cls(0)
+    g:draw()
+end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

@@ -9,4 +9,6 @@ docs contain design documentation
 | [Prototype Log](docs/Prototype%20Log.md)           | the state and order of prototypes                        |
 | [Initial Concept](docs/Initial%20Concept)          | very barebones... My initial notes for the game's idea   |
 # Build Instructions
-open in [Pico 8](https://www.lexaloffle.com/pico-8.php). Uses my library [Pico Badger v1](https://github.com/Platymek/pico-badger) to run this (just clone it into `pico-badger` folder)
+open in [Pico 8](https://www.lexaloffle.com/pico-8.php). Dependencies:
+- [PECS 2.0.0](https://github.com/jesstelford/pecs/releases/tag/v2.0.0) in `pecs` folder
+- [Latest Pico Badger](https://github.com/Platymek/pico-badger) in `pico-badger` folder
