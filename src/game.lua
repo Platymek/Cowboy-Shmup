@@ -17,6 +17,9 @@ function g:init()
     g.c = getGameComponents(g.w, g.bc)
 
     g.initBullet()
+    g.initPlayer()
+
+    g.p = g.new.Player(64, 64)
 end
 
 function g:deinit()
@@ -31,13 +34,16 @@ function g:update(dt)
     g.w.update()
     g.bc.PhysicsSystem(dt)
 
+    g.c.PlayerSystem(dt)
+
     g.t += dt
 
-    if g.t > 0.1 then
+    if g.t > 1 then
 
         g.t = 0
-        g.new.Bullet(64, 64, 2, g.i * 0.1, 16)
-        g.i += 1
+        g.new.Bullet(64, 0, 2, 0.25, 32)
+        g.new.Bullet(64, 0, 2, 0.3,  32)
+        g.new.Bullet(64, 0, 2, 0.2,  32)
     end
 end
 
