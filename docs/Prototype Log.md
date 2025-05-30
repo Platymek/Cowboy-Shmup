@@ -67,23 +67,34 @@ bullet entity:
 	- colour: the colour of the outer bullet
 
 custom components, created using `getGameComponents(world, bc)`:
-- created using `getGameComponents(world, bc)`
-	- `world`: `pecs` world
-	- `bc`: `pico-badger` components
-	- returns an object with the following components
-- `Hitbox`
-	- hits hurtboxes
-	- overrides `Circle`
-	- `.new.HitBox(team, r, x, y, w, h, [onHurt])`
-		- `team`: team. Can only hurt other teams. If `nil` damages all teams
-		- `onHurt`: function called when hurt, with params:
-			- `me, you`
-- `HurtBox`
-	- his hit by hitboxes
-	- overrides `Circle`
-	- `.new.HurtBox(team, r, x, y, w, h, onHit)`
-		- `team`: team. Can only be hurt by other teams. If `nil`, is damaged by all teams
-- `BulletSprite`
-	- draws a bullet sprite composed of two circles
-	- `newBulletSprite(colour, r)`
-		- `r`: radius
+created using `getGameComponents(world, bc)`
+- `world`: `pecs` world
+- `bc`: `pico-badger` components
+- returns an object with the following components
+`Hitbox`
+- hits hurtboxes
+- overrides `Circle`
+- automatically hurts health if present
+- `.new.HitBox(team, r, x, y, [onHurt])`
+	- `team`: team. Can only hurt other teams. If `nil` damages all teams
+	- `onHurt`: func/s called when hurt, with params:
+		- `me, you`
+		- default: empty
+`HurtBox`
+- his hit by hitboxes
+- overrides `Circle`
+- `.new.HurtBox(team, r, x, y, [onHit])`
+	- `team`: team. Can only be hurt by other teams. If `nil`, is damaged by all teams
+`BulletSprite`
+- draws a bullet sprite composed of two circles
+- `newBulletSprite(colour, r)`
+	- `r`: radius
+`Health`
+- records health of characters
+- `newHealth(max, [onHurt, val])`
+	- `max`: max health
+	- `onHurt(newHealth)`: when hurt call func/s. Params:
+		- `newHealth`: new health value
+		- default: `nil`
+	- `val`: current value
+- `inv`: if the character is currently invincible, do not hurt

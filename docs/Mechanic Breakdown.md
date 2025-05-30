@@ -6,6 +6,7 @@
 | main push and pull | ammo vs spacing:<br>- enemies push ahead and want to get behind you<br>- defeating enemies requires ammo<br>- reloading requires spacing |
 | gameplay loop      | 1. shoot enemies<br>2. avoid bullets<br>3. reload                                                                                        |
 # Player Mechanics
+## shoot
 
 | Aspect     | Description                                          |
 | ---------- | ---------------------------------------------------- |
@@ -18,3 +19,29 @@
 | Reward     | enemy is hit                                         |
 | Progress   | defeated enemies progress the game                   |
 | Depth      | the player can hold left and right to change its arc |
+## reload
+| Aspect     | Description                                                                                |
+| ---------- | ------------------------------------------------------------------------------------------ |
+| Mechanic   | reload 3 rounds of ammo by swiping an arc with your gun (pressing O)                       |
+| Purpose    | retrieve ammo lost by shooting enemies                                                     |
+| Appeal     | reloading feels good                                                                       |
+| Opposition | reloading cannot be cancelled, meaning the player cannot shoot during the reload animation |
+| Polarity   | reloading holds the player in place                                                        |
+| Risk       | player is hit during reloading stun                                                        |
+| Reward     | player gets ammo back                                                                      |
+| Progress   | get ammo so you can shoot and defeat enemies                                               |
+| Depth      | reload parry                                                                               |
+## reload parry
+
+| Aspect     | Description                                                                                                   |
+| ---------- | ------------------------------------------------------------------------------------------------------------- |
+| Mechanic   | reloading on a parry bullet restores all ammo                                                                 |
+| Purpose    | to get the player to move to more                                                                             |
+| Appeal     | fun and risky. It's like the player catches the bullet with their gun                                         |
+| Opposition | requires good positioning as well as good judgement of when to reload                                         |
+| Polarity   | the player enters a short extra reload animation, confirming it worked but holding the player in place longer |
+| Risk       | get hit by a bullet when in reload stun                                                                       |
+| Reward     | full ammo reload                                                                                              |
+| Progress   | can help get more ammo, which means                                                                           |
+
+

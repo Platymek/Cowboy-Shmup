@@ -5,6 +5,7 @@ __lua__
 #include pecs/pecs.lua
 #include pico-badger/pico-badger.lua
 
+#include src/conf.lua
 #include src/components.lua
 #include src/game.lua
 

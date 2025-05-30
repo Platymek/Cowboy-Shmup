@@ -6,11 +6,11 @@ function g.initPlayer()
 
     --[[states:
     
-    0 - idle
-    1 - reload
-    2 - shoot left
-    3 - shoot
-    4 - shoot right
+        0 - idle
+        1 - reload
+        2 - shoot left
+        3 - shoot
+        4 - shoot right
     ]]
 
     
@@ -20,7 +20,22 @@ function g.initPlayer()
         
         p += g.bc.new.Position(x, y)
         p += g.bc.new.Velocity()
-        p += g.bc.new.Sprite(1, -8, -8, 2, 2)
+        p += g.bc.new.Sprite(1, -4, -4, 2, 2)
+
+        p += g.c.new.Hurtbox(0, 4, nil, nil,
+
+        function (me, you)
+            
+            local ypos = you[g.bc.Position]
+            stop(ypos.x .. ", " .. ypos.y .. ",\ndistance: " .. ypos:distanceSquared(me[g.bc.Position]))
+        end)
+
+        p += g.c.new.Health(conf.p.health, 
+        
+        function (val)
+            
+            stop("I've been hurt! My new health is" .. val)
+        end)
 
         p += g.c.Player({
 
@@ -33,7 +48,7 @@ function g.initPlayer()
             buffAction = function (self, action)
 
                 self.action = action
-                self.buff = 0.4
+                self.buff = conf.p.buff
             end,
 
             checkBuff = function (self)
@@ -60,13 +75,19 @@ function g.initPlayer()
                     self:checkBuff()
                 end
 
+                -- reload
+                if state == 1 then
+                    
+                    self.stun = conf.p.stunRel
+                end
+
                 -- shoot
                 if state > 1 then
                     
-                    self.stun = 0.2
+                    self.stun = conf.p.stunSho
                     
                     local pos = p[g.bc.Position]
-                    g.new.Bullet(pos.x - 4, pos.y - 8, 2, 0.75 + (state - 3) * 0.05, 128, 7, 8)
+                    g.new.Bullet(pos.x, pos.y - 16, 4, 0.75 + (state - 3) * conf.aimOff, 128, 7, 8, 0)
                 end
             end,
         })
@@ -117,8 +138,6 @@ function g.initPlayer()
             
             if not pla:checkBuff() then
 
-                local s = 32
-
                 local x = 0
                 local y = 0
 
@@ -138,8 +157,8 @@ function g.initPlayer()
                 if x ~= 0 or y ~= 0 then
                     
                     local a = atan2(x, y)
-                    vel.x = cos(a) * s
-                    vel.y = sin(a) * s
+                    vel.x = cos(a) * conf.p.speed
+                    vel.y = sin(a) * conf.p.speed
                 end
             end
 
