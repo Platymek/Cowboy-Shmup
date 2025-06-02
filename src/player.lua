@@ -14,36 +14,30 @@ function g.initPlayer()
     ]]
 
     
-    function g.new.Player(x, y)
+    function g.new.Player(x, y, onHealthChange, onAmmoChange)
 
         local p = g.w.entity()
         
         p += g.bc.new.Position(x, y)
         p += g.bc.new.Velocity()
-        p += g.bc.new.Sprite(1, -4, -4, 2, 2)
+        p += g.bc.new.Sprite(1, -4, -4, 1, 1)
 
-        p += g.c.new.Hurtbox(0, 4, nil, nil,
+        p += g.c.new.Hurtbox(0, conf.p.hRadius, nil, nil,
+        function (me, you) local ypos = you[g.bc.Position] end)
 
-        function (me, you)
-            
-            local ypos = you[g.bc.Position]
-            stop(ypos.x .. ", " .. ypos.y .. ",\ndistance: " .. ypos:distanceSquared(me[g.bc.Position]))
-        end)
-
-        p += g.c.new.Health(conf.p.health, 
-        
-        function (val)
-            
-            stop("I've been hurt! My new health is" .. val)
-        end)
+        p += g.c.new.Health(conf.p.health,
+        function (val) call(onHealthChange, val) end)
 
         p += g.c.Player({
 
-            state = 0,  -- player state
-            stun = 0,   -- remaining stun time
-            buff = 0,   -- remaining action buffer time
-            action = 0, -- buffered action
+            state   = 0, -- player state
+            stun    = 0, -- remaining stun time
+            buff    = 0, -- remaining action buffer time
+            action  = 0, -- buffered action
             pressed = false, -- if action is pressed (blocks holding)
+            
+            ammo    = conf.p.maxAmmo, -- remaining ammo
+            maxAmmo = conf.p.maxAmmo, -- remaining ammo
 
             buffAction = function (self, action)
 
@@ -84,6 +78,9 @@ function g.initPlayer()
                 -- shoot
                 if state > 1 then
                     
+                    self.ammo -= 1
+                    call(onAmmoChange, self.ammo)
+
                     self.stun = conf.p.stunSho
                     
                     local pos = p[g.bc.Position]

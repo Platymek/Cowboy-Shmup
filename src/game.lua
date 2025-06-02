@@ -1,30 +1,29 @@
 
 g = {
 
-    w = nil,  -- World
-    bc = nil, -- Badger Components
-    c = nil,  -- Game Components
-    new = {}, -- New Entities
+    w   = nil, -- World
+    bc  = nil, -- Badger Components
+    c   = nil, -- Game Components
+    new =  {}, -- New Entities
+    hud = nil,
 
-    t = 0,    -- Time (for tests)
-    i = 0,    -- Index (for tests)
+    t = 0, -- Time (for tests)
+    i = 0, -- Index (for tests)
 }
 
 function g:init()
     
-    g.w = pecs()
+    g.w  = pecs()
     g.bc = getBadgerComponents(g.w)
-    g.c = getGameComponents(g.w, g.bc)
+    g.c  = getGameComponents(g.w, g.bc)
+    g.hud= initHud()
 
     g.initBullet()
     g.initPlayer()
 
-    g.p = g.new.Player(64, 64)
-    
-    b = g.w.entity()
-    b += g.bc.new.Position(32, 32)
-    b += g.c.new.Hitbox(1, 4)
-    b += g.bc.new.Sprite(1)
+    g.p = g.new.Player(64, 64, 
+    function (val) g.hud.health = val end,
+    function (val) g.hud.ammo   = val end)
 end
 
 function g:deinit()
@@ -60,6 +59,7 @@ end
 
 function g:draw()
     
+    cls(3)
     g.bc.GraphicsSystem()
     g.c.BulletGraphicsSystem()
 
@@ -68,19 +68,5 @@ function g:draw()
     local hb  = g.p[g.c.Hurtbox]
 
     hb:draw(11, pos.x, pos.y, true)
-
-
-    for _, e in pairs(query({g.c.Hitbox, g.c.Position})) do
-
-        local pos = e[g.bc.Position]
-        local hb  = e[g.c.Hitbox]
-
-        hb:draw(11, pos.x, pos.y, true)
-        --pset(pos.x, pos.y, 11)
-    end
-
-    local bpos = b[g.bc.Position]
-    local bhb  = g.p[g.c.Hurtbox]
-    bhb:draw(11, bpos.x, bpos.y, true)
-    print(b[g.bc.Position]:distanceSquared(g.p[g.bc.Position]), 0, 0, 7)
+    g.hud:draw()
 end

@@ -7,6 +7,7 @@ reqs:
 - shoot button in 3 directions
 - reload button, which reloads one bullet
 - a simple enemy which fires bullets in multiple directions
+- simple hud
 
 `Circle` class:
 - overrides `Position` from `pico-badger`
@@ -24,6 +25,13 @@ reqs:
 	- `.stunRel`: reload stun duration
 	- `.stunSho`: shoot stun duration
 	- `.maxAmmo`: max ammo
+
+`hud` object:
+- shows relevant info, changed using functions:
+	- health: `setHealth`
+	- ammo: `setAmmo`
+- `draw`: draws the hud on screen
+- does this using functions
 
 `g` singleton:
 - stores custom components and world
