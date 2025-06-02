@@ -4,13 +4,13 @@ function g.initBullet()
     g.c.Bullet = g.w.component()
     
     
-    function g.new.Bullet(x, y, r, angle, speed, c, ic, team)
+    function g.new.Bullet(x, y, r, angle, speed, c, ic, team, parry)
 
         local b = g.w.entity()
         
         b += g.bc.new.Position(x, y)
         b += g.bc.new.Velocity(speed * cos(angle), speed * -sin(angle))
-        b += g.c.Bullet({r = r, c = c or 8, ic = ic or 7})
+        b += g.c.Bullet({r = r, c = c or 8, ic = ic or 7, parry = parry or false})
         b += g.c.new.Hitbox(team or 1, r + 1, nil, nil, 1)
         
         return b
@@ -28,7 +28,7 @@ function g.initBullet()
         end
     end)
     
-    function g.c.BulletGraphicsSystem ()
+    function g.c.BulletGraphicsSystem()
         
         local q = g.w.query({g.c.Bullet})
 
@@ -45,5 +45,62 @@ function g.initBullet()
             local b = e[g.c.Bullet]
             Circle:new(b.r, p.x, p.y):draw(b.ic)
         end
+    end
+
+
+    -- parry bag
+    local pBag = {}
+
+    for _, v in pairs(conf.b.paChSe) do
+
+        for i = 1, v - 1 do
+
+            pBag[#pBag + 1] = false
+        end
+        
+        pBag[#pBag + 1] = true
+    end
+
+
+    -- parry bag index
+    local pbi = 1
+
+    local function getRandParry()
+
+        local p = pBag[pbi]
+
+        pbi += 1
+        if pbi > #pBag then pbi = 1 end
+
+        return p
+    end
+
+
+    function g:shootParry(x, y, r, angle, speed)
+
+        local b = self.new.Bullet(
+            x, y, r, angle, speed,
+            conf.b.pao, conf.b.pai,
+            1, true)
+
+        return b
+    end
+        
+
+    -- shoots enemy bullets. Random chance to be parry
+    function g:shoot(x, y, r, angle, speed)
+
+        local b = getRandParry() and
+
+            g:shootParry(x, y, r, angle, speed)
+
+            or -- is a regular bullet
+
+            self.new.Bullet(
+                x, y, r, angle, speed,
+                conf.b.eno, conf.b.eni,
+                1, false)
+
+        return b
     end
 end

@@ -51,9 +51,9 @@ function g:update(dt)
         local s = 16
 
         g.t = 2
-        g.new.Bullet(64, 0, 2, a - conf.aimOff, s)
-        g.new.Bullet(64, 0, 2, a, s)
-        g.new.Bullet(64, 0, 2, a + conf.aimOff, s)
+        g:shoot(64, 0, 2, a - conf.aimOff, s)
+        g:shoot(64, 0, 2, a, s)
+        g:shoot(64, 0, 2, a + conf.aimOff, s)
     end
 end
 

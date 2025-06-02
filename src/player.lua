@@ -13,6 +13,10 @@ function g.initPlayer()
         4 - shoot right
     ]]
 
+
+    local ps = Sprite:new(1,  -4, -4) -- player
+    local gs = Sprite:new(6, -12, -12) -- gun
+
     
     function g.new.Player(x, y, onHealthChange, onAmmoChange)
 
@@ -20,7 +24,9 @@ function g.initPlayer()
         
         p += g.bc.new.Position(x, y)
         p += g.bc.new.Velocity()
-        p += g.bc.new.Sprite(1, -4, -4, 1, 1)
+
+        local sg = g.bc.new.SpriteGroup(ps)
+        p += sg
 
         p += g.c.new.Hurtbox(0, conf.p.hRadius, nil, nil,
         function (me, you) local ypos = you[g.bc.Position] end)
@@ -39,18 +45,27 @@ function g.initPlayer()
             ammo    = conf.p.maxAmmo, -- remaining ammo
             maxAmmo = conf.p.maxAmmo, -- remaining ammo
 
+
             buffAction = function (self, action)
 
                 self.action = action
                 self.buff = conf.p.buff
             end,
 
+
             checkBuff = function (self)
 
                 if self.buff > 0 then
                     
                     self.buff = 0
-                    self:setState(self.action)
+
+                    -- only shoot if enough ammo
+                    if (self.action >= 2 and self.ammo > 0) or 
+                        self.action == 1 then
+
+                        self:setState(self.action)
+                    end
+
                     return true
                 end
 
@@ -58,35 +73,52 @@ function g.initPlayer()
                 return false
             end,
 
-            setState = function (self, state)
 
-                self.state = state
+            setAmmo = function(self, val)
+
+                self.ammo = min(val, conf.p.maxAmmo)
+                call(onAmmoChange, self.ammo)
+            end,
+
+
+            setState = function (self, enter)
+
+                local exit = self.state
+                self.state = enter
 
                 -- idle
-                if state == 0 then
+                if enter == 0 then
 
                     self.stun = 0
                     self:checkBuff()
                 end
 
                 -- reload
-                if state == 1 then
+                if exit == 1 then
+
+                    sg:remove(gs)
+                end
+                if enter == 1 then
                     
                     self.stun = conf.p.stunRel
+                    self:setAmmo(self.ammo + 1)
+
+                    -- add gun sprite
+                    gs.x = -12
+                    sg:add(gs)
                 end
 
                 -- shoot
-                if state > 1 then
+                if enter > 1 then
                     
-                    self.ammo -= 1
-                    call(onAmmoChange, self.ammo)
-
                     self.stun = conf.p.stunSho
+                    self:setAmmo(self.ammo - 1)
                     
+                    -- shoot bullet
                     local pos = p[g.bc.Position]
                     g.new.Bullet(
                         pos.x, pos.y - 8, 2,
-                        0.75 + (state - 3) * conf.aimOff,
+                        0.75 + (enter - 3) * conf.aimOff,
                         128, 8, 2, 0)
                 end
             end,
@@ -165,9 +197,16 @@ function g.initPlayer()
         elseif pla.stun > 0 then
 
             pla.stun -= dt
+            
+            -- reload animation
+            if pla.state == 1 then
+
+                -- slide gun from left to right, stopping when can cancel
+                gs.x = 4 + -16 * max((pla.stun - conf.p.cancRel) / (conf.p.stunRel - conf.p.cancRel), 0)
+            end
 
             -- cancel reload or shoot based on cancel period
-            if pla.stun <= (state == 1 and conf.p.cancRel or conf.p.cancSho) 
+            if pla.stun <= (pla.state == 1 and conf.p.cancRel or conf.p.cancSho)
             then pla:checkBuff() end
         else
             pla:setState(0)
