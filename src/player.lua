@@ -165,6 +165,10 @@ function g.initPlayer()
         elseif pla.stun > 0 then
 
             pla.stun -= dt
+
+            -- cancel reload or shoot based on cancel period
+            if pla.stun <= (state == 1 and conf.p.cancRel or conf.p.cancSho) 
+            then pla:checkBuff() end
         else
             pla:setState(0)
         end
