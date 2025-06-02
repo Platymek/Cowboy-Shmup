@@ -12,5 +12,5 @@ conf = {
         hRadius = 2,    -- hit radius
     },
 
-    aimOff = 0.05, -- aim offset angle
+    aimOff = 0.075, -- aim offset angle
 }

@@ -6,25 +6,25 @@ function initHud(ammo, health)
         
         rectfill(x, y, x + 9, y + m * 8, 0)
 
-        for i = 0, m - 1 do
+        for i = 1, m do
 
             -- draw heart or empty
-            spr(i <= h and 3 or 2, x + 1, y + i * 8)
+            spr(i <= h and 3 or 2, x + 1, y + (i - 1) * 8)
         end
     end
     
-    -- h: ammo, m: max
-    local function drawA(h, m)
+    -- a: ammo, m: max
+    local function drawA(a, m)
         
         local x = 64 - m * 8 / 2
         local y = 116
 
         rectfill(x - 1, y - 1, x + m * 8, y + 8, 0)
 
-        for i = 0, m - 1 do
+        for i = 1, m do
 
             -- draw heart or empty
-            spr(i <= h and 5 or 4, i * 8 + x, y)
+            spr(i <= a and 5 or 4, (i - 1) * 8 + x, y)
         end
     end
 
@@ -35,8 +35,8 @@ function initHud(ammo, health)
 
         draw = function (self)
 
-            drawH(2, 2,         self.health, conf.p.health)
-            drawA(self.ammo,   conf.p.maxAmmo)
+            drawH(2, 2, self.health, conf.p.health)
+            drawA(self.ammo, conf.p.maxAmmo)
         end
     }
 

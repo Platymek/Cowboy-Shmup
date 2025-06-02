@@ -84,7 +84,10 @@ function g.initPlayer()
                     self.stun = conf.p.stunSho
                     
                     local pos = p[g.bc.Position]
-                    g.new.Bullet(pos.x, pos.y - 16, 4, 0.75 + (state - 3) * conf.aimOff, 128, 7, 8, 0)
+                    g.new.Bullet(
+                        pos.x, pos.y - 8, 2,
+                        0.75 + (state - 3) * conf.aimOff,
+                        128, 8, 2, 0)
                 end
             end,
         })

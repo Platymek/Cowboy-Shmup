@@ -1,5 +1,4 @@
 
-
 function getGameComponents(w, bc)
 
     local c = {
@@ -59,7 +58,10 @@ function getGameComponents(w, bc)
     function c.new.Hitbox(team, r, x, y, dam, onHurt)
 
         local hb = getBox(c.Hitbox, team, r, x, y, onHurt)
+        
         hb.dam = dam or 1 -- damage dealt by the hitbox
+        hb.hit = {} -- entities currently inside hitbox
+
 		return hb
     end
 
@@ -79,30 +81,45 @@ function getGameComponents(w, bc)
         local pos = ent[bc.Position]
         local off = hit:getOffset(pos.x, pos.y)
 
+        -- currently in hitbox
+        local curHit = {}
+
         -- for all entities of a different team with a hurtbox
         for _, hurtEnt in pairs(w.query({c.Hurtbox, bc.Position})) do
         if hurtEnt ~= ent then
 
             local hurt   = hurtEnt[c.Hurtbox]
             local hPos   = hurtEnt[bc.Position]
-            local health = hurtEnt[c.Health]
             local hOff   = hit:getOffset(hPos.x, hPos.y)
 
             if (hit.team ~= hurt.team or not hit.team or not hurt.team)
             and off:isOverlapping(hOff) then
 
-                if hit.onHurt then
-                    call(hit.onHurt,  ent, hurtEnt)
-                end
-
-                if hurt.onHurt then
-                    call(hurt.onHurt, hurtEnt, ent)
-                end
-                
-                -- damage if has health component
-                if health then health:hurt(hit.dam) end
+                -- sets don't exist in lua
+                curHit[hurtEnt] = true
             end
         end end
+
+        -- for all entities currently in hitbox
+        for e, _ in pairs(curHit) do
+
+            -- hit if has not already
+            if not hit.hit[e] then
+
+                -- callbacks
+                if hit.onHurt then call(hit.onHurt, ent, e) end
+                if e  .onHurt then call(  e.onHurt, e, ent) end
+                
+                -- damage if has health component
+                local health = e[c.Health]
+                if health then health:hurt(hit.dam) end
+
+                hit.hit[e] = true
+            end
+        end
+
+        -- remove entities that are no longer in hitbox
+        for e, _ in pairs(hit.hit) do hit.hit[e] = curHit[e] or nil end
     end)
 
 
