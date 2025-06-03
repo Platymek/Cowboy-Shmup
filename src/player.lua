@@ -17,6 +17,16 @@ function g.initPlayer()
     local ps = Sprite:new(1,  -4, -4) -- player
     local gs = Sprite:new(6, -12, -12) -- gun
 
+    -- team, x, y, w, h, onParry
+    local pa = g.c.new.ParryDetector(0,
+
+        -- dimensions
+        -conf.p.paW, -conf.p.paH * 2 - 4,
+        conf.p.paW * 2, conf.p.paH * 2,
+
+        -- restore all ammo on parry
+        function (me, you) me[g.c.Player]:setAmmo(999) end)
+
     
     function g.new.Player(x, y, onHealthChange, onAmmoChange)
 
@@ -24,6 +34,7 @@ function g.initPlayer()
         
         p += g.bc.new.Position(x, y)
         p += g.bc.new.Velocity()
+
 
         local sg = g.bc.new.SpriteGroup(ps)
         p += sg
@@ -96,12 +107,22 @@ function g.initPlayer()
                 -- reload
                 if exit == 1 then
 
+                    -- remove parry detector
+                    if p[g.c.ParryDetector] then
+                        p -= g.c.ParryDetector
+                    end
+
                     sg:remove(gs)
                 end
                 if enter == 1 then
                     
                     self.stun = conf.p.stunRel
                     self:setAmmo(self.ammo + 1)
+                    
+                    -- add parry detector
+                    if not p[g.c.ParryDetector] then
+                        p += pa
+                    end
 
                     -- add gun sprite
                     gs.x = -12

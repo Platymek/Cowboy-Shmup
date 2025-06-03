@@ -4,7 +4,7 @@ conf = {
     p = { -- player
     
         stunRel = 0.5, -- stun on reload
-        cancRel = 0.25,  -- cancel reload duration
+        cancRel = 0.1,  -- cancel reload duration
 
         stunSho = 0.3,  -- stun duration on shoot
         cancSho = 0.1,  -- cancel shoot duration
@@ -14,6 +14,10 @@ conf = {
         buff    = 0.4,  -- buffer duration
         health  = 3,
         hRadius = 2,    -- hit radius
+
+        -- parry hitbox size
+        paW = 8, -- this is half the width
+        paH = 4,
     },
 
     aimOff = 0.075, -- aim offset angle

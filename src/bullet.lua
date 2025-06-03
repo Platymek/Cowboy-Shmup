@@ -12,6 +12,12 @@ function g.initBullet()
         b += g.bc.new.Velocity(speed * cos(angle), speed * -sin(angle))
         b += g.c.Bullet({r = r, c = c or 8, ic = ic or 7, parry = parry or false})
         b += g.c.new.Hitbox(team or 1, r + 1, nil, nil, 1)
+
+        if parry then
+
+            b += g.c.new.Parryable(team or 1, -r, -r, r * 2, r * 2,
+                function (me, you) b += g.bc.new.Delete() end)
+        end
         
         return b
     end
@@ -85,21 +91,27 @@ function g.initBullet()
 
         return b
     end
+
+
+    function g:shootNormal(x, y, r, angle, speed)
+
+        local b = self.new.Bullet(
+            x, y, r, angle, speed,
+            conf.b.eno, conf.b.eni,
+            1, false)
+
+        return b
+    end
         
 
     -- shoots enemy bullets. Random chance to be parry
     function g:shoot(x, y, r, angle, speed)
 
+        -- if parry chance true, shoot parry bullet
         local b = getRandParry() and
 
-            g:shootParry(x, y, r, angle, speed)
-
-            or -- is a regular bullet
-
-            self.new.Bullet(
-                x, y, r, angle, speed,
-                conf.b.eno, conf.b.eni,
-                1, false)
+            g:shootParry(x, y, r, angle, speed) or
+            g:shootNormal(x, y, r, angle, speed)
 
         return b
     end

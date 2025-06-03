@@ -39,6 +39,7 @@ function g:update(dt)
     g.bc.PhysicsSystem(dt)
 
     g.c.PlayerSystem(dt)
+    g.c.ParrySystem()
     g.c.HitSystem()
     g.c.BulletDeleteSystem()
     g.bc.DeleteSystem()
@@ -66,7 +67,9 @@ function g:draw()
 
     local pos = g.p[g.bc.Position]
     local hb  = g.p[g.c.Hurtbox]
+    local par = g.p[g.c.ParryDetector]
 
-    hb:draw(11, pos.x, pos.y, true)
+    hb:draw (11, pos.x, pos.y, true)
+    if par then par:draw(11, pos.x, pos.y, false) end
     g.hud:draw()
 end

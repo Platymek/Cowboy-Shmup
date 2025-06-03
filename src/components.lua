@@ -69,6 +69,41 @@ function getGameComponents(w, bc)
 
 		return getBox(c.Hurtbox, team, r, x, y, onHurt)
     end
+
+
+    -- parry components
+
+    c.Parryable = w.component()
+    c.ParryDetector = w.component()
+
+    local function getPar(par, team, x, y, w, h, onParry)
+        
+		local rect = Rectangle:new(x or -4, y or -4, w or 8, h or 8)
+
+        local p = par({
+        
+            team = team,     -- team of the parryable
+            onParry = onParry, -- function to call when parried
+        })
+
+		setmetatable(p, {__index = rect})
+
+        return p
+    end
+
+    function c.new.Parryable(team, x, y, w, h, onParry)
+
+        return getPar(c.Parryable, team, x, y, w, h, onParry)
+    end
+
+    function c.new.ParryDetector(team, x, y, w, h, onParry)
+
+        local p = getPar(c.ParryDetector, team, x, y, w, h, onParry)
+
+        p.hit = {} -- entities currently inside parry detector
+        
+        return p
+    end
     
 
     -- systems
@@ -105,10 +140,12 @@ function getGameComponents(w, bc)
 
             -- hit if has not already
             if not hit.hit[e] then
+                
+                local hurt = e[c.Hurtbox]
 
                 -- callbacks
-                if hit.onHurt then call(hit.onHurt, ent, e) end
-                if e  .onHurt then call(  e.onHurt, e, ent) end
+                if  hit.onHurt then call( hit.onHurt, ent, e) end
+                if hurt.onHurt then call(hurt.onHurt, e, ent) end
                 
                 -- damage if has health component
                 local health = e[c.Health]
@@ -120,6 +157,54 @@ function getGameComponents(w, bc)
 
         -- remove entities that are no longer in hitbox
         for e, _ in pairs(hit.hit) do hit.hit[e] = curHit[e] or nil end
+    end)
+
+    c.ParrySystem = w.system({c.ParryDetector, bc.Position},
+
+    function (me)
+        
+        local parrier = me[c.ParryDetector]
+        local mePos   = me[bc.Position]
+        local meOff   = parrier:getOffset(mePos.x, mePos.y)
+        
+
+        -- currently in parry detector
+        local curPar = {}
+
+        for _, yo in pairs(w.query({c.Parryable, bc.Position})) do
+
+            local parrble = yo[c.Parryable]
+            local yoPos   = yo[bc.Position]
+            local yoOff   = parrble:getOffset(yoPos.x, yoPos.y)
+
+
+            if (parrier.team ~= parrble.team or not parrier.team or not parrble.team)
+            and meOff:isOverlapping(yoOff) then
+
+                -- sets don't exist in lua
+                curPar[yo] = true
+            end
+        end
+
+
+        -- for all entities currently in parry detector
+        for yo, _ in pairs(curPar) do
+
+            -- parry if not already
+            if not parrier.hit[yo] then
+
+                local parrble = yo[c.Parryable]
+
+                -- callbacks
+                if parrier.onParry then call(parrier.onParry, me, yo) end
+                if parrble.onParry then call(parrble.onParry, yo, me) end
+
+                parrier.hit[yo] = true
+            end
+        end
+
+        -- remove entities that are no longer in hitbox
+        for yo, _ in pairs(parrier.hit) do parrier.hit[yo] = curPar[yo] or nil end
     end)
 
 
