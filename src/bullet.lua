@@ -11,7 +11,10 @@ function g.initBullet()
         b += g.bc.new.Position(x, y)
         b += g.bc.new.Velocity(speed * cos(angle), speed * -sin(angle))
         b += g.c.Bullet({r = r, c = c or 8, ic = ic or 7, parry = parry or false})
-        b += g.c.new.Hitbox(team or 1, r + 1, nil, nil, 1)
+
+        -- delete on hit
+        b += g.c.new.Hitbox(team or 1, r + 1, nil, nil, 1, 
+        function() b += g.bc.new.Delete() end)
 
         if parry then
 

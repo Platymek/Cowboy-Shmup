@@ -7,11 +7,11 @@ conf = {
         cancRel = 0.1,  -- cancel reload duration
 
         stunSho = 0.3,  -- stun duration on shoot
-        cancSho = 0.1,  -- cancel shoot duration
+        cancSho = 0.15,  -- cancel shoot duration
 
         speed   = 32,
         maxAmmo = 6,
-        buff    = 0.4,  -- buffer duration
+        buff    = 0.6,  -- buffer duration
         health  = 3,
         hRadius = 2,    -- hit radius
 
@@ -20,7 +20,11 @@ conf = {
         paH = 4,
     },
 
-    aimOff = 0.075, -- aim offset angle
+    aimOff = 0.1, -- aim offset angle
+
+    -- screen cutoff where player cannot go
+    -- but enemies stand
+    cutoff = 128 - 20,
 
     b = { -- bullet
 
@@ -42,6 +46,20 @@ conf = {
         -- creates a random bag.
         -- e.g. {3,...} means the first 2 won't parry, the 3rd will
         -- then the bag adds on the next values
-        paChSe = {3, 5, 4}
+        paChSe = {6, 12}
     },
+
+    e = { -- enemy
+
+        speed = 8,
+        
+        bn = 3,    -- number of bullets fired in a burst
+        bt = 0.5,  -- time between bullets in a burst 
+        bb = 2,    -- time between bursts
+        bs = 32,   -- bullet speed
+
+        -- offset sizes, small and large
+        os = 0.02, 
+        ol = 0.075,
+    }
 }

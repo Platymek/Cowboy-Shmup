@@ -158,6 +158,10 @@ function g.initPlayer()
         local vel = e[g.bc.Velocity]
 
 
+        -- cut player off from bottom
+        pos.y = min(pos.y, conf.cutoff)
+
+
         -- action buffering
 
         if pla.buff > 0 then pla.buff -= dt end

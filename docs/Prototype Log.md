@@ -74,6 +74,19 @@ bullet entity:
 	- angle, speed: the angle and speed to fire the bullet
 	- colour: the colour of the outer bullet
 
+enemy entity:
+- slowly walks down
+- shoots towards player a line of 3 bullets
+- when bottom of screen reached, stand still and keep shooting
+- `:new(x)`
+	- automatically spawns at top of speed
+- `conf.e`:
+	- `speed`: how quickly the enemy walks down
+	- `bn`: number of bullets fired
+	- `bs`:
+- `conf`:
+	- `sl`: list of small lanes. There should be abou
+
 custom components, created using `getGameComponents(world, bc)`:
 created using `getGameComponents(world, bc)`
 - `world`: `pecs` world

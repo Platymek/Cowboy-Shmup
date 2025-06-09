@@ -7,8 +7,11 @@ g = {
     new =  {}, -- New Entities
     hud = nil,
 
-    t = 0, -- Time (for tests)
-    i = 0, -- Index (for tests)
+    -- current demo vars:
+    sr = 1.75, -- spawn rate
+    t = 0, -- time till next spawn
+    e = 10, -- enemy count
+    ce= 0, -- current wave
 }
 
 function g:init()
@@ -20,6 +23,7 @@ function g:init()
 
     g.initBullet()
     g.initPlayer()
+    g.initEnemy()
 
     g.p = g.new.Player(64, 64, 
     function (val) g.hud.health = val end,
@@ -39,22 +43,30 @@ function g:update(dt)
     g.bc.PhysicsSystem(dt)
 
     g.c.PlayerSystem(dt)
+    g.c.EnemySystem(dt)
+
     g.c.ParrySystem()
     g.c.HitSystem()
     g.c.BulletDeleteSystem()
     g.bc.DeleteSystem()
 
-    g.t -= dt
+    if g.ce < g.e then
 
-    if g.t <= 0 then
+        g.t -= dt
 
-        local a = 0.25
-        local s = 16
+        if g.t <= 0 then
 
-        g.t = 2
-        g:shoot(64, 0, 2, a - conf.aimOff, s)
-        g:shoot(64, 0, 2, a, s)
-        g:shoot(64, 0, 2, a + conf.aimOff, s)
+            for i = 0, 16 do
+
+                if mget(i, g.ce) == 7 then
+
+                    g.new.Enemy(i * 8 + 8)
+                end
+            end
+
+            g.t = g.sr
+            g.ce += 1
+        end
     end
 end
 
@@ -69,7 +81,8 @@ function g:draw()
     local hb  = g.p[g.c.Hurtbox]
     local par = g.p[g.c.ParryDetector]
 
-    hb:draw (11, pos.x, pos.y, true)
-    if par then par:draw(11, pos.x, pos.y, false) end
+    --hb:draw (11, pos.x, pos.y, true)
+    --if par then par:draw(11, pos.x, pos.y, false) end
     g.hud:draw()
+    print(g.ce, nil, nil, 7)
 end
