@@ -15,7 +15,10 @@ function g.initEnemy()
         e += g.c .new.Health(conf.e.h, 
         function (val) if val == 0 then e += g.bc.new.Delete() end end)
 
-        e += g.c.Enemy({t = conf.e.bb, b = 0, a = nil, strafe = false})
+        e += g.c.Enemy({t = 16 / conf.e.speed, b = 0, a = nil,
+        
+        -- if on the left side, strafe right first
+        strafe = x < 64})
 
         return e
     end
@@ -42,19 +45,7 @@ function g.initEnemy()
                 local ppos = g.p[g.bc.Position]
                 if not ene.a then ene.a = atan2(ppos.x - pos.x, pos.y - ppos.y) end
 
-                -- shoot at larger offset every other shot
-                if ene.b == 1 then
-
-                    g:shootParry (pos.x, pos.y, 2, ene.a, conf.e.bs)
-
-                    g:shootNormal(pos.x, pos.y, 2, ene.a + conf.e.ol - conf.e.os, conf.e.bs)
-                    g:shootNormal(pos.x, pos.y, 2, ene.a - conf.e.ol + conf.e.os, conf.e.bs)
-                    
-                    g:shootNormal(pos.x, pos.y, 2, ene.a + conf.e.ol, conf.e.bs)
-                    g:shootNormal(pos.x, pos.y, 2, ene.a - conf.e.ol, conf.e.bs)
-                else
-                    g:shootNormal(pos.x, pos.y, 2, ene.a, conf.e.bs)
-                end
+                g:shoot(pos.x, pos.y, 2, ene.a + conf.e.os * (ene.b % 3 - 1), conf.e.bs)
                 
                 ene.t = conf.e.bt
                 ene.b -= 1
@@ -69,7 +60,7 @@ function g.initEnemy()
                 if pos.y < conf.cutoff then
 
                     vel.y = conf.e.speed
-                    vel.x = conf.e.speed * (ene.strafe and 1 or -1)
+                    vel.x = conf.e.strafe * (ene.strafe and 1 or -1)
                 end
 
                 if not me[g.c.Hurtbox] then

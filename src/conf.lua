@@ -21,6 +21,9 @@ conf = {
 
         ammRel = 1, -- amount to reload
         ammPar = 2, -- amount parrying reloads
+
+        -- bullet clear distance
+        bcDist = 32,
     },
 
     aimOff = 0.05, -- aim offset angle
@@ -54,15 +57,16 @@ conf = {
 
     e = { -- enemy
 
-        speed = 8,
+        speed  = 16,
+        strafe = 16,
         
-        bn = 5,    -- number of bullets fired in a burst
-        bt = 0.2,  -- time between bullets in a burst 
-        bb = 1.75,    -- time between bursts
+        bn = 3,    -- number of bullets fired in a burst
+        bt = 0.5,  -- time between bullets in a burst 
+        bb = 1.75, -- time between bursts
         bs = 32,   -- bullet speed
 
         -- offset sizes, small and large
-        os = 0.02,
+        os = 0.03,
         ol = 0.075,
 
         h = 2, -- health

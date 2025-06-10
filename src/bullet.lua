@@ -14,7 +14,8 @@ function g.initBullet()
 
         -- delete on hit
         b += g.c.new.Hitbox(team or 1, r + 1, nil, nil, 1, 
-        function() b += g.bc.new.Delete() end)
+
+        function() g.bc.tryDelete(b) end)
 
         if parry then
 

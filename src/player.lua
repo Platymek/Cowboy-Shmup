@@ -15,7 +15,7 @@ function g.initPlayer()
     ]]
 
 
-    local ps = Sprite:new(1,  -4, -4) -- player
+    local ps = Sprite:new(1, - 4, - 4) -- player
     local gs = Sprite:new(6, -12, -12) -- gun
 
     -- team, x, y, w, h, onParry
@@ -35,8 +35,9 @@ function g.initPlayer()
     function g.new.Player(x, y, onHealthChange, onAmmoChange)
 
         local p = g.w.entity()
+        local pos = g.bc.new.Position(x, y)
         
-        p += g.bc.new.Position(x, y)
+        p += pos
         p += g.bc.new.Velocity()
 
 
@@ -44,7 +45,22 @@ function g.initPlayer()
         p += sg
 
         p += g.c.new.Hurtbox(0, conf.p.hRadius, nil, nil,
-        function (me, you) local ypos = you[g.bc.Position] end)
+
+        function (me, you) 
+
+            local ypos = you[g.bc.Position]
+
+            -- delete all bullets in radius
+            for _, b in pairs(g.w.query({g.c.Bullet})) do
+
+                if b[g.bc.Position]:distanceSquared(pos) 
+                < (conf.p.bcDist * conf.p.bcDist)
+                and b[g.c.Hitbox].team ~= 0 then 
+
+                    g.bc.tryDelete(b)
+                end
+            end
+        end)
 
         p += g.c.new.Health(conf.p.health,
         function (val) call(onHealthChange, val) end)
