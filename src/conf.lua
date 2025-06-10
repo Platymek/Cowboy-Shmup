@@ -9,7 +9,7 @@ conf = {
         stunSho = 0.3,  -- stun duration on shoot
         cancSho = 0.15,  -- cancel shoot duration
 
-        speed   = 32,
+        speed   = 40,
         maxAmmo = 6,
         buff    = 0.6,  -- buffer duration
         health  = 3,
@@ -18,9 +18,12 @@ conf = {
         -- parry hitbox size
         paW = 8, -- this is half the width
         paH = 4,
+
+        ammRel = 1, -- amount to reload
+        ammPar = 2, -- amount parrying reloads
     },
 
-    aimOff = 0.1, -- aim offset angle
+    aimOff = 0.05, -- aim offset angle
 
     -- screen cutoff where player cannot go
     -- but enemies stand
@@ -51,15 +54,17 @@ conf = {
 
     e = { -- enemy
 
-        speed = 8,
+        speed = 12,
         
         bn = 3,    -- number of bullets fired in a burst
-        bt = 0.5,  -- time between bullets in a burst 
-        bb = 2,    -- time between bursts
+        bt = 0.75,  -- time between bullets in a burst 
+        bb = 1.75,    -- time between bursts
         bs = 32,   -- bullet speed
 
         -- offset sizes, small and large
-        os = 0.02, 
+        os = 0.02,
         ol = 0.075,
+
+        h = 3, -- health
     }
 }

@@ -3,7 +3,7 @@ function g.initEnemy()
 
     g.c.Enemy = g.w.component()
 
-    local hb = g.c.new.Hurtbox (1, 8, nil, nil)
+    local hb = g.c.new.Hurtbox (1, 12, nil, nil)
 
     function g.new.Enemy(x)
         
@@ -12,7 +12,7 @@ function g.initEnemy()
         e += g.bc.new.Position(x, -16)
         e += g.bc.new.Velocity(0, conf.e.speed)
         e += g.bc.new.Sprite(7)
-        e += g.c .new.Health(3, 
+        e += g.c .new.Health(conf.e.h, 
         function (val) if val == 0 then e += g.bc.new.Delete() end end)
 
         e += g.c.Enemy({t = conf.e.bb, b = 0, a = nil, split = false})
@@ -48,14 +48,14 @@ function g.initEnemy()
                 g:shoot(pos.x, pos.y, 2, ene.a - off, conf.e.bs)
                 ene.split = not ene.split
                 ]]
-
-                -- line then burst
-                g:shoot(pos.x, pos.y, 2, ene.a, conf.e.bs)
-
+                
                 if ene.b == 1 then
 
-                    g:shoot(pos.x, pos.y, 2, ene.a + conf.e.ol, conf.e.bs)
-                    g:shoot(pos.x, pos.y, 2, ene.a - conf.e.ol, conf.e.bs)
+                    g:shootNormal(pos.x, pos.y, 2, ene.a + conf.e.ol, conf.e.bs)
+                    g:shootNormal(pos.x, pos.y, 2, ene.a - conf.e.ol, conf.e.bs)
+                    g:shootParry(pos.x, pos.y, 2, ene.a, conf.e.bs)
+                else
+                    g:shootNormal(pos.x, pos.y, 2, ene.a, conf.e.bs)
                 end
                 
                 ene.t = conf.e.bt

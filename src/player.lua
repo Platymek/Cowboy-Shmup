@@ -8,9 +8,10 @@ function g.initPlayer()
     
         0 - idle
         1 - reload
-        2 - shoot left
-        3 - shoot
-        4 - shoot right
+        2 - parry
+        3 - shoot left
+        4 - shoot
+        5 - shoot right
     ]]
 
 
@@ -25,7 +26,10 @@ function g.initPlayer()
         conf.p.paW * 2, conf.p.paH * 2,
 
         -- restore all ammo on parry
-        function (me, you) me[g.c.Player]:setAmmo(999) end)
+        function (me, you)
+            local p = me[g.c.Player]
+            p:setAmmo(p.ammo + conf.p.ammPar)
+        end)
 
     
     function g.new.Player(x, y, onHealthChange, onAmmoChange)
@@ -71,7 +75,7 @@ function g.initPlayer()
                     self.buff = 0
 
                     -- only shoot if enough ammo
-                    if (self.action >= 2 and self.ammo > 0) or 
+                    if (self.action >= 3 and self.ammo > 0) or 
                         self.action == 1 then
 
                         self:setState(self.action)
@@ -117,7 +121,7 @@ function g.initPlayer()
                 if enter == 1 then
                     
                     self.stun = conf.p.stunRel
-                    self:setAmmo(self.ammo + 1)
+                    self:setAmmo(self.ammo + conf.p.ammRel)
                     
                     -- add parry detector
                     if not p[g.c.ParryDetector] then
@@ -130,7 +134,7 @@ function g.initPlayer()
                 end
 
                 -- shoot
-                if enter > 1 then
+                if enter > 2 then
                     
                     self.stun = conf.p.stunSho
                     self:setAmmo(self.ammo - 1)
@@ -139,7 +143,7 @@ function g.initPlayer()
                     local pos = p[g.bc.Position]
                     g.new.Bullet(
                         pos.x, pos.y - 8, 2,
-                        0.75 + (enter - 3) * conf.aimOff,
+                        0.75 + (enter - 4) * conf.aimOff,
                         128, 8, 2, 0)
                 end
             end,
@@ -170,9 +174,9 @@ function g.initPlayer()
 
             if      btn(❎) then 
 
-                if      btn(⬅️) then pla:buffAction(2)
-                elseif  btn(➡️) then pla:buffAction(4)
-                else pla:buffAction(3) 
+                if      btn(⬅️) then pla:buffAction(3)
+                elseif  btn(➡️) then pla:buffAction(5)
+                else pla:buffAction(4)
                 end
 
             elseif  btn(🅾️) then pla:buffAction(1)
