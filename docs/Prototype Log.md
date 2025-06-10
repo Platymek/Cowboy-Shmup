@@ -1,6 +1,14 @@
 prototypes are ordered where higher headings are newer
-# 27-05-2025 initial character prototype
-## 27-05 basic character
+# 27-05 initial character prototype
+player character controller and a concept of an enemy
+## evaluation
+the health system feels pointless when the game is designed around not letting enemies reach the bottom of the screen. The following changes will be made:
+- when the player is hurt, they are just stunned and knocked back, wasting time and allowing the enemies to get back. This is really frustrating but in a good way I think?
+- health will deplete on enemies reaching the bottom. Should they stay there and still shoot the player, though?
+
+I might also try the following:
+- make characters bigger. This includes trying to make art for the player and the test enemy
+## plan
 player character controller and extremely simple test enemy
 
 reqs:

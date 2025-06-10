@@ -36,36 +36,16 @@ function g.initPlayer()
 
         local p = g.w.entity()
         local pos = g.bc.new.Position(x, y)
+        local vel = g.bc.new.Velocity()
         
         p += pos
-        p += g.bc.new.Velocity()
+        p += vel
 
 
         local sg = g.bc.new.SpriteGroup(ps)
         p += sg
 
-        p += g.c.new.Hurtbox(0, conf.p.hRadius, nil, nil,
-
-        function (me, you) 
-
-            local ypos = you[g.bc.Position]
-
-            -- delete all bullets in radius
-            for _, b in pairs(g.w.query({g.c.Bullet})) do
-
-                if b[g.bc.Position]:distanceSquared(pos) 
-                < (conf.p.bcDist * conf.p.bcDist)
-                and b[g.c.Hitbox].team ~= 0 then 
-
-                    g.bc.tryDelete(b)
-                end
-            end
-        end)
-
-        p += g.c.new.Health(conf.p.health,
-        function (val) call(onHealthChange, val) end)
-
-        p += g.c.Player({
+        local pla = g.c.Player({
 
             state   = 0, -- player state
             stun    = 0, -- remaining stun time
@@ -149,6 +129,13 @@ function g.initPlayer()
                     sg:add(gs)
                 end
 
+                if enter == 2 then
+
+                    self.stun = conf.p.stunHur
+                    vel.y = conf.p.backHur / conf.p.stunHur
+                    vel.x = 0
+                end
+
                 -- shoot
                 if enter > 2 then
                     
@@ -164,6 +151,26 @@ function g.initPlayer()
                 end
             end,
         })
+        
+        p += pla
+        p += g.c.new.Hurtbox(0, conf.p.hRadius, nil, nil,
+
+        function (me, you) 
+
+            local ypos = you[g.bc.Position]
+            pla:setState(2)
+
+            -- delete all bullets in radius
+            for _, b in pairs(g.w.query({g.c.Bullet})) do
+
+                if b[g.bc.Position]:distanceSquared(pos) 
+                < (conf.p.bcDist * conf.p.bcDist)
+                and b[g.c.Hitbox].team ~= 0 then 
+
+                    g.bc.tryDelete(b)
+                end
+            end
+        end)
         
         return p
     end
