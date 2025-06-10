@@ -15,7 +15,7 @@ function g.initEnemy()
         e += g.c .new.Health(conf.e.h, 
         function (val) if val == 0 then e += g.bc.new.Delete() end end)
 
-        e += g.c.Enemy({t = conf.e.bb, b = 0, a = nil, split = false})
+        e += g.c.Enemy({t = conf.e.bb, b = 0, a = nil, strafe = false})
 
         return e
     end
@@ -33,6 +33,7 @@ function g.initEnemy()
         if ene.t <= 0 then
             
             vel.y = 0
+            vel.x = 0
 
             -- if burst still remaining...
             if ene.b > 0 then
@@ -42,24 +43,22 @@ function g.initEnemy()
                 if not ene.a then ene.a = atan2(ppos.x - pos.x, pos.y - ppos.y) end
 
                 -- shoot at larger offset every other shot
-                --[[
-                local off = ene.split and conf.e.ol or conf.e.os
-                g:shoot(pos.x, pos.y, 2, ene.a + off, conf.e.bs)
-                g:shoot(pos.x, pos.y, 2, ene.a - off, conf.e.bs)
-                ene.split = not ene.split
-                ]]
-                
                 if ene.b == 1 then
 
+                    g:shootParry (pos.x, pos.y, 2, ene.a, conf.e.bs)
+
+                    g:shootNormal(pos.x, pos.y, 2, ene.a + conf.e.ol - conf.e.os, conf.e.bs)
+                    g:shootNormal(pos.x, pos.y, 2, ene.a - conf.e.ol + conf.e.os, conf.e.bs)
+                    
                     g:shootNormal(pos.x, pos.y, 2, ene.a + conf.e.ol, conf.e.bs)
                     g:shootNormal(pos.x, pos.y, 2, ene.a - conf.e.ol, conf.e.bs)
-                    g:shootParry(pos.x, pos.y, 2, ene.a, conf.e.bs)
                 else
                     g:shootNormal(pos.x, pos.y, 2, ene.a, conf.e.bs)
                 end
                 
                 ene.t = conf.e.bt
                 ene.b -= 1
+                ene.strafe = not ene.strafe
 
             -- if burst finished...
             else
@@ -70,6 +69,7 @@ function g.initEnemy()
                 if pos.y < conf.cutoff then
 
                     vel.y = conf.e.speed
+                    vel.x = conf.e.speed * (ene.strafe and 1 or -1)
                 end
 
                 if not me[g.c.Hurtbox] then

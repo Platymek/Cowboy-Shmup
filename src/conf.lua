@@ -54,10 +54,10 @@ conf = {
 
     e = { -- enemy
 
-        speed = 12,
+        speed = 8,
         
-        bn = 3,    -- number of bullets fired in a burst
-        bt = 0.75,  -- time between bullets in a burst 
+        bn = 5,    -- number of bullets fired in a burst
+        bt = 0.2,  -- time between bullets in a burst 
         bb = 1.75,    -- time between bursts
         bs = 32,   -- bullet speed
 
@@ -65,6 +65,6 @@ conf = {
         os = 0.02,
         ol = 0.075,
 
-        h = 3, -- health
+        h = 2, -- health
     }
 }
