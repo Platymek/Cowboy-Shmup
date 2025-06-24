@@ -125,7 +125,7 @@ function getGameComponents(w, bc)
 
             local hurt   = hurtEnt[c.Hurtbox]
             local hPos   = hurtEnt[bc.Position]
-            local hOff   = hit:getOffset(hPos.x, hPos.y)
+            local hOff   = hurt:getOffset(hPos.x, hPos.y)
 
             if (hit.team ~= hurt.team or not hit.team or not hurt.team)
             and off:isOverlapping(hOff) then
@@ -144,7 +144,7 @@ function getGameComponents(w, bc)
                 local hurt = e[c.Hurtbox]
 
                 -- callbacks
-                if  hit.onHurt then call( hit.onHurt, ent, e) end
+                if hit .onHurt then call(hit .onHurt, ent, e) end
                 if hurt.onHurt then call(hurt.onHurt, e, ent) end
                 
                 -- damage if has health component

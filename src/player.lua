@@ -147,7 +147,7 @@ function g.initPlayer()
                     g.new.Bullet(
                         pos.x, pos.y - 8, 2,
                         0.75 + (enter - 4) * conf.aimOff,
-                        128, 8, 2, 0)
+                        128, 7, 8, 0)
                 end
             end,
         })

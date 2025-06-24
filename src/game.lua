@@ -24,6 +24,7 @@ function g:init()
     g.initBullet()
     g.initPlayer()
     g.initEnemy()
+    g.initBandit()
 
     g.p = g.new.Player(64, 64, 
     function (val) g.hud.health = val end,
@@ -44,6 +45,7 @@ function g:update(dt)
 
     g.c.PlayerSystem(dt)
     g.c.EnemySystem(dt)
+    g.c.BanditSystem(dt)
 
     g.c.ParrySystem()
     g.c.HitSystem()
@@ -60,7 +62,7 @@ function g:update(dt)
 
                 if mget(i, g.ce) == 7 then
 
-                    g.new.Enemy(i * 8 + 8)
+                    g.new.Bandit(i * 8 + 8)
                 end
             end
 
@@ -81,8 +83,8 @@ function g:draw()
     local hb  = g.p[g.c.Hurtbox]
     local par = g.p[g.c.ParryDetector]
 
-    --hb:draw (11, pos.x, pos.y, true)
+    hb:draw (11, pos.x, pos.y, true)
     --if par then par:draw(11, pos.x, pos.y, false) end
     g.hud:draw()
-    print(g.ce, nil, nil, 7)
+    --print(g.ce, nil, nil, 7)
 end
