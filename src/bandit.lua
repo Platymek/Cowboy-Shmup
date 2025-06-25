@@ -55,13 +55,8 @@ function g.initBandit()
 
             ban.b = c.b
 
-            if ban.flip then
-                g:shoot(pos.x + 12, pos.y, 2, 0.25, c.bsp)
-                g:shoot(pos.x, pos.y, 2, 0.25, c.bsp)
-            else
-                g:shoot(pos.x - 12, pos.y, 2, 0.25, c.bsp)
-                g:shoot(pos.x, pos.y, 2, 0.25, c.bsp)
-            end
+            g:shoot(pos.x, pos.y, 2, 0.25, c.bsp)
+            g:shoot(pos.x, pos.y, 2, 0.25 + conf.aimOff * (ban.flip and -1 or 1) , c.bsp)
 
             ban.flip = not ban.flip
         end

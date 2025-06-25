@@ -25,6 +25,7 @@ function g:init()
     g.initPlayer()
     g.initEnemy()
     g.initBandit()
+    g.initDog()
 
     g.p = g.new.Player(64, 64, 
     function (val) g.hud.health = val end,
@@ -60,9 +61,15 @@ function g:update(dt)
 
             for i = 0, 16 do
 
-                if mget(i, g.ce) == 7 then
+                local m = mget(i, g.ce)
+
+                if m == 7 then
 
                     g.new.Bandit(i * 8 + 8)
+
+                elseif m == 8 then
+
+                    g.new.Dog(i * 8 + 8)
                 end
             end
 
