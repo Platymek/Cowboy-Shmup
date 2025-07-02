@@ -11,9 +11,9 @@ function g.initKennel()
         -- startup
         s  = 2,
         -- dog rate
-        d  = 8,
+        d  = 6,
         -- health
-        h  = 6,
+        h  = 8,
     }
 
 

@@ -3,11 +3,11 @@ conf = {
 
     p = { -- player
     
-        stunRel = 0.5, -- stun on reload
+        stunRel = 0.4, -- stun on reload
         cancRel = 0.1,  -- cancel reload duration
 
-        stunSho = 0.3,  -- stun duration on shoot
-        cancSho = 0.15,  -- cancel shoot duration
+        stunSho = 0.2,  -- stun duration on shoot
+        cancSho = 0.1,  -- cancel shoot duration
 
         stunHur = 1, -- stun duration on hurt
         backHur = 16, -- knockback distance on hurt

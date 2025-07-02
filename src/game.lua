@@ -49,6 +49,7 @@ function g:update(dt)
     g.c.EnemySystem(dt)
     g.c.BanditSystem(dt)
     g.c.KennelSystem(dt)
+    g.c.DogSystem(dt)
 
     g.c.ParrySystem()
     g.c.HitSystem()

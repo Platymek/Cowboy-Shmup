@@ -9,6 +9,7 @@ function g.initDog()
 
         sp = 32, -- speed
         h  =  1, -- health
+        b  =  2, -- bullet rate
     }
 
     function g.new.Dog(x)
@@ -22,6 +23,26 @@ function g.initDog()
         e += g.c .new.Health(c.h,
         function (val) if val == 0 then e += g.bc.new.Delete() end end)
 
+        e += g.c.Dog({b = 0})
+
         return e
     end
+
+
+    g.c.DogSystem = g.w.system({g.c.Dog},
+
+    function(e, dt)
+    
+        local dog = e[g.c.Dog]
+
+        dog.b -= dt
+
+        if dog.b <= 0 then
+            
+            dog.b = c.b
+
+            local pos = e[g.bc.Position]
+            g:shoot(pos.x, pos.y, 2, 0.25, c.sp * 0.75)
+        end
+    end)
 end
