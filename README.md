@@ -5,7 +5,7 @@ docs contain design and code documentation
 
 | doc                                                | description                                              |
 | -------------------------------------------------- | -------------------------------------------------------- |
-| [Code Doc](docs/Code%20Doc)                        |                                                          |
+| [Code Doc](docs/Code%20Doc.md)                     | documentation code for easy implementation               |
 | [Mechanic Breakdown](docs/Mechanic%20Breakdown.md) | discusses the current state of the game's core mechanics |
 | [Prototype Log](docs/Prototype%20Log.md)           | the state and order of prototypes                        |
 | [Initial Concept](docs/Initial%20Concept)          | very barebones... My initial notes for the game's idea   |

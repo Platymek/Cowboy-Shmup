@@ -27,6 +27,7 @@ function g:init()
     g.initBandit()
     g.initDog()
     g.initKennel()
+    g.initSumo()
 
     g.p = g.new.Player(64, 64, 
     function (val) g.hud.health = val end,
@@ -77,6 +78,10 @@ function g:update(dt)
                 elseif m == 9 then
 
                     g.new.Kennel(i * 8 + 8)
+
+                elseif m == 10 then
+
+                    g.new.Sumo(i * 8 + 8)
                 end
             end
 
@@ -86,12 +91,12 @@ function g:update(dt)
     end
 end
 
-function g:draw()
+function g:draw(dt)
     
     cls(3)
     g.bc.GraphicsSystem()
     g.c.BulletGraphicsSystem()
-
+    g.c.SumoSystem(dt)
 
     local pos = g.p[g.bc.Position]
     local hb  = g.p[g.c.Hurtbox]
@@ -102,11 +107,9 @@ function g:draw()
     g.hud:draw()
     --print(g.ce, nil, nil, 7)
 
-    for _, e in pairs(g.w.query({g.c.Kennel})) do
-
-        local hb = e[g.c.Hurtbox]
-        local ep = e[g.bc.Position]
-
-        if hb then hb:draw(8, ep.x, ep.y) end
-    end
+    --for _, e in pairs(g.w.query({g.c.Kennel})) do
+    --    local hb = e[g.c.Hurtbox]
+    --    local ep = e[g.bc.Position]
+    --    if hb then hb:draw(8, ep.x, ep.y) end
+    --end
 end

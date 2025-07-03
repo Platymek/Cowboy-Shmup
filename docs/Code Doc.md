@@ -1,4 +1,73 @@
 details functions used to create the game.
+# guides
+## teams
+where functions ask for team values, this is what each one corresponds to so far:
+
+| team  | desc                                              |
+| ----- | ------------------------------------------------- |
+| `nil` | no team. Hurts and is hurt by others with no team |
+| 0     | player                                            |
+| 1     | enemy                                             |
+
+## adding an enemy
+create the enemy script:
+```lua
+--[[ in new script for enemy ]]
+
+function g.initPlayer()
+
+	-- create a component
+	g.c.EnemyName = g.w.component()
+
+	-- enemy constructer. X is default but make it whatever you want
+	function g.new.EnemyName(x)
+
+		local e = g.w.entity()
+		local ene = g.c.EnemyName({--[[whatever]]})
+		local pos = g.bc.new.Position(x, -8) -- minus height
+		local vel = g.bc.new.Velocity(0, 0)
+		
+		local hea = g.c.new.Health(c.h,
+		-- auto kills on death. To be replaced. Replace with whatever u want
+        function (val) if val == 0 then e += g.bc.new.Delete() end end)
+		
+		ene:update = function(dt)
+			
+			-- update function
+		end
+		
+		-- add other functions to the ene component if needed
+		
+		-- adding components at the end means comps can be used in functions
+		e += ene
+		e += pos
+		return e
+	end
+	
+	g.c.SumoSystem = g.w.system({g.c.Sumo},
+	-- function which runs update loop
+	function(e, dt) e[g.c.Sumo]:update(dt) end)
+	
+	-- sometimes the system isn't needed depending on how simple the entity is
+end
+```
+this is then added to `game.lua`:
+```lua
+
+function g:init()
+
+	--...
+	g.c.initEne()
+	--...
+end
+
+function g:update(dt)
+
+	--...
+	g.c.EneSystem()
+	--...
+end
+```
 # components
 found in `src/components.lua`
 ## `Health`
