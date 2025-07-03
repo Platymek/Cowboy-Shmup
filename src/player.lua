@@ -160,16 +160,13 @@ function g.initPlayer()
             local ypos = you[g.bc.Position]
             pla:setState(2)
 
-            -- delete all bullets in radius
+            -- delete all bullets
             for _, b in pairs(g.w.query({g.c.Bullet})) do
 
-                if b[g.bc.Position]:distanceSquared(pos) 
-                < (conf.p.bcDist * conf.p.bcDist)
-                and b[g.c.Hitbox].team ~= 0 then 
-
-                    g.bc.tryDelete(b)
-                end
+                g.bc.tryDelete(b)
             end
+                
+            g:blockBullets()
         end)
         
         return p

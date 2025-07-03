@@ -2,6 +2,14 @@
 function g.initBullet()
 
     g.c.Bullet = g.w.component()
+
+
+    -- bullet conf
+    -- some of this is in the conf file
+    local c = {
+
+        bbt = conf.p.stunHur * 2, -- bullet block time
+    }
     
     
     function g.new.Bullet(x, y, r, angle, speed, c, ic, team, parry)
@@ -27,11 +35,25 @@ function g.initBullet()
     end
 
     g.c.BulletDeleteSystem = g.w.system({g.c.Bullet, g.bc.Position},
-    function (e)
+    function (e, dt)
 
         local p = e[g.bc.Position]
         local b = e[g.c.Bullet]
+        
 
+        -- end bullet block
+        if g.bulletBlock then
+
+            g.bllBlkTimer -= dt
+
+            if g.bllBlkTimer <= 0 then
+
+                g.bulletBlock = false
+            end
+        end
+
+
+        -- if bullet goes off screen, delete
         if p.x < -b.r or p.x > 128 + b.r or p.y < -b.r or p.y > 128 + b.r then
 
             e += g.bc.new.Delete()
@@ -88,6 +110,8 @@ function g.initBullet()
 
     function g:shootParry(x, y, r, angle, speed)
 
+        if g.bulletBlock then return nil end
+
         local b = self.new.Bullet(
             x, y, r, angle, speed,
             conf.b.pao, conf.b.pai,
@@ -98,6 +122,8 @@ function g.initBullet()
 
 
     function g:shootNormal(x, y, r, angle, speed)
+
+        if g.bulletBlock then return nil end
 
         local b = self.new.Bullet(
             x, y, r, angle, speed,
@@ -118,5 +144,11 @@ function g.initBullet()
             g:shootNormal(x, y, r, angle, speed)
 
         return b
+    end
+
+    function g:blockBullets()
+        
+        g.bulletBlock = true
+        g.bllBlkTimer = c.bbt
     end
 end

@@ -149,6 +149,8 @@ there are several functions to help easily spawn in bullets. They all have param
 | `shoot`         | shoots a bullet with a random chance of being parryable |
 | `shootNormal`   | shoots a non-parryable bullet                           |
 | `shootParry`    | shoots a parryable bullet                               |
+### `g.c.blockBullets()`
+blocks all bullets for a period of time
 ## Player
 player character
 

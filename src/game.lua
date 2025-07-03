@@ -7,6 +7,9 @@ g = {
     new =  {}, -- New Entities
     hud = nil,
 
+    bulletBlock = false, -- if true, bullets will not be spawned
+    bllBlkTimer = 0, -- bullet block timer
+
     -- current demo vars:
     sr = 1.75, -- spawn rate
     t = 0, -- time till next spawn
@@ -54,9 +57,11 @@ function g:update(dt)
 
     g.c.ParrySystem()
     g.c.HitSystem()
-    g.c.BulletDeleteSystem()
+    g.c.BulletDeleteSystem(dt)
     g.bc.DeleteSystem()
 
+
+    -- sample spawning code
     if g.ce < g.e then
 
         g.t -= dt
