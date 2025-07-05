@@ -34,31 +34,31 @@ function g.initBullet()
         return b
     end
 
-    g.c.BulletDeleteSystem = g.w.system({g.c.Bullet, g.bc.Position},
-    function (e, dt)
 
-        local p = e[g.bc.Position]
-        local b = e[g.c.Bullet]
+    local bllBlkTimer = 0
+
+    function g.c.BulletDeleteSystem(dt)
         
 
         -- end bullet block
-        if g.bulletBlock then
+        if bllBlkTimer > 0 then
 
-            g.bllBlkTimer -= dt
+            bllBlkTimer -= dt
+        end
 
-            if g.bllBlkTimer <= 0 then
 
-                g.bulletBlock = false
+        for _, e in pairs(g.w.query({g.c.Bullet, g.bc.Position})) do
+
+            local p = e[g.bc.Position]
+            local b = e[g.c.Bullet]
+
+            -- if bullet goes off screen, delete
+            if p.x < -b.r or p.x > 128 + b.r or p.y < -b.r or p.y > 128 + b.r then
+
+                e += g.bc.new.Delete()
             end
         end
-
-
-        -- if bullet goes off screen, delete
-        if p.x < -b.r or p.x > 128 + b.r or p.y < -b.r or p.y > 128 + b.r then
-
-            e += g.bc.new.Delete()
-        end
-    end)
+    end
     
     function g.c.BulletGraphicsSystem()
         
@@ -110,7 +110,7 @@ function g.initBullet()
 
     function g:shootParry(x, y, r, angle, speed)
 
-        if g.bulletBlock then return nil end
+        if bllBlkTimer > 0 then return nil end
 
         local b = self.new.Bullet(
             x, y, r, angle, speed,
@@ -123,7 +123,7 @@ function g.initBullet()
 
     function g:shootNormal(x, y, r, angle, speed)
 
-        if g.bulletBlock then return nil end
+        if bllBlkTimer > 0 then return nil end
 
         local b = self.new.Bullet(
             x, y, r, angle, speed,
@@ -148,7 +148,6 @@ function g.initBullet()
 
     function g:blockBullets()
         
-        g.bulletBlock = true
-        g.bllBlkTimer = c.bbt
+        bllBlkTimer = c.bbt
     end
 end

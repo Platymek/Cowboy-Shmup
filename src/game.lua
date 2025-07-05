@@ -7,7 +7,6 @@ g = {
     new =  {}, -- New Entities
     hud = nil,
 
-    bulletBlock = false, -- if true, bullets will not be spawned
     bllBlkTimer = 0, -- bullet block timer
 
     -- current demo vars:
@@ -51,10 +50,11 @@ function g:update(dt)
 
     g.c.PlayerSystem(dt)
     g.c.EnemySystem(dt)
-    g.c.BanditSystem(dt)
+    --g.c.BanditSystem(dt)
     g.c.KennelSystem(dt)
-    g.c.DogSystem(dt)
+    g.c.SumoSystem(dt)
 
+    g.c.TickSystem(dt)
     g.c.ParrySystem()
     g.c.HitSystem()
     g.c.BulletDeleteSystem(dt)
@@ -101,7 +101,6 @@ function g:draw(dt)
     cls(3)
     g.bc.GraphicsSystem()
     g.c.BulletGraphicsSystem()
-    g.c.SumoSystem(dt)
 
     local pos = g.p[g.bc.Position]
     local hb  = g.p[g.c.Hurtbox]

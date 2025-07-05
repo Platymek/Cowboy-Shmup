@@ -74,6 +74,12 @@ found in `src/components.lua`
 easy health component which automatically drains when a character is hit
 
 `new.Health(max, onHurt, val)`
+# `Tick`
+contains a timer which ticks down if above zero. Time must be set manually on every tick
+
+`new.Tick(t, onTick)`
+- `t`: current time. If above 0, always ticks down
+- `onTick`: calls function/s on time reaching 0. You'd probably want to reset this in this function
 ## `Hitbox` and `Hurtbox`
 inherits `Circle` class from `pico-badger` for collisions
 

@@ -104,6 +104,20 @@ function getGameComponents(w, bc)
         
         return p
     end
+
+
+    -- Tick component
+
+    c.Tick = w.component()
+
+    function c.new.Tick(t, onTick)
+
+        return c.Tick({
+        
+            t = t, -- remaining time
+            onTick = onTick, -- function to call when ticked
+        })
+    end
     
 
     -- systems
@@ -159,6 +173,7 @@ function getGameComponents(w, bc)
         for e, _ in pairs(hit.hit) do hit.hit[e] = curHit[e] or nil end
     end)
 
+
     c.ParrySystem = w.system({c.ParryDetector, bc.Position},
 
     function (me)
@@ -205,6 +220,22 @@ function getGameComponents(w, bc)
 
         -- remove entities that are no longer in hitbox
         for yo, _ in pairs(parrier.hit) do parrier.hit[yo] = curPar[yo] or nil end
+    end)
+
+
+    c.TickSystem = w.system({c.Tick},
+
+    function (ent, dt)
+
+        local tick = ent[c.Tick]
+
+
+        if tick.t <= 0 then return end
+
+        tick.t -= dt
+
+        -- call onTick if time is up
+        if tick.t <= 0 and tick.onTick then call(tick.onTick, tick) end
     end)
 
 

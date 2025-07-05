@@ -99,7 +99,6 @@ function g.initSumo()
 
             local sum = e[g.c.Sumo]
             sum.t -= dt
-            print(e[g.c.Hurtbox], nil, nil, 7)
 
             if sum.t < 0 then
                 

@@ -21,14 +21,34 @@ function g.initBandit()
 
         local e = g.w.entity()
 
-        e += g.bc.new.Position(x, -8)
+        local pos = g.bc.new.Position(x, -8)
+        -- s: startup, b: bullet
+        local ban = g.c.Bandit({f = false, s = true})
+
+        e += g.c.new.Tick(c.s, function (self)
+        
+            if ban.s then
+                
+                e += hb
+                ban.s = false
+                self.t = c.b
+                return
+            end
+
+            self.t = c.b
+
+            g:shoot(pos.x, pos.y, 2, 0.25, c.bsp)
+            g:shoot(pos.x, pos.y, 2, 0.25 + conf.aimOff * (ban.f and -1 or 1) , c.bsp)
+
+            ban.f = not ban.f
+        end)
+        
+        e += ban
+        e += pos
         e += g.bc.new.Velocity(0, c.sp)
         e += g.bc.new.Sprite(7)
         e += g.c .new.Health(c.h,
         function (val) if val == 0 then e += g.bc.new.Delete() end end)
-
-        -- s: startup, b: bullet
-        e += g.c.Bandit({s = c.s, b = c.b, flip = false})
 
         return e
     end
