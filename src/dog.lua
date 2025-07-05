@@ -22,6 +22,7 @@ function g.initDog()
         e += g.c .new.Hurtbox(1, 6)
         e += g.c .new.Health(c.h,
         function (val) if val == 0 then e += g.bc.new.Delete() end end)
+        e += g.c .new.Enemy()
 
         local dog = g.c.Dog()
 

@@ -45,6 +45,7 @@ function g.initBandit()
         
         e += ban
         e += pos
+        e += g.c .new.Enemy()
         e += g.bc.new.Velocity(0, c.sp)
         e += g.bc.new.Sprite(7)
         e += g.c .new.Health(c.h,

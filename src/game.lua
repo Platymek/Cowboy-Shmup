@@ -6,6 +6,8 @@ g = {
     c   = nil, -- Game Components
     new =  {}, -- New Entities
     hud = nil,
+    Health = nil, -- health
+    hurt= nil,
 
     bllBlkTimer = 0, -- bullet block timer
 
@@ -21,11 +23,13 @@ function g:init()
     g.w  = pecs()
     g.bc = getBadgerComponents(g.w)
     g.c  = getGameComponents(g.w, g.bc)
-    g.hud= initHud()
+    g.hud= initHud(conf.p.maxAmmo, conf.p.maxHealth)
+
+    g.Health = g.c.new.Health(conf.p.maxHealth, function(val) g.hud.health = val end)
+    g.hurt = function() g.Health:hurt(1) end
 
     g.initBullet()
     g.initPlayer()
-    g.initEnemy()
     g.initBandit()
     g.initDog()
     g.initKennel()
@@ -49,11 +53,10 @@ function g:update(dt)
     g.bc.PhysicsSystem(dt)
 
     g.c.PlayerSystem(dt)
-    g.c.EnemySystem(dt)
-    --g.c.BanditSystem(dt)
     g.c.KennelSystem(dt)
     g.c.SumoSystem(dt)
 
+    g.c.EnemySystem()
     g.c.TickSystem(dt)
     g.c.ParrySystem()
     g.c.HitSystem()

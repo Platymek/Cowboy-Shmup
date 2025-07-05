@@ -117,6 +117,7 @@ function g.initSumo()
         e += vel
         e += spg
         e += hea
+        e += g.c .new.Enemy()
         
         sum:setState(0)
 

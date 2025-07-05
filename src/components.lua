@@ -118,6 +118,20 @@ function getGameComponents(w, bc)
             onTick = onTick, -- function to call when ticked
         })
     end
+
+
+    -- Enemy component
+
+    c.Enemy = w.component()
+
+    function c.new.Enemy(onPass, passPos)
+
+        return c.Enemy({
+
+            passPos = passPos or 128 + 8,
+            onPass = onPass or g.hurt,
+        })
+    end
     
 
     -- systems
@@ -237,7 +251,21 @@ function getGameComponents(w, bc)
         -- call onTick if time is up
         if tick.t <= 0 and tick.onTick then call(tick.onTick, tick) end
     end)
+    
 
+    function c.EnemySystem(dt)
+
+        for _, e in pairs(w.query({c.Enemy, bc.Position})) do
+        
+            local ene = e[c.Enemy]
+
+            if ene.passPos < e[bc.Position].y then
+
+                call(ene.onPass, e)
+                g.bc.tryDelete(e)
+            end
+        end
+    end
 
     return c
 end

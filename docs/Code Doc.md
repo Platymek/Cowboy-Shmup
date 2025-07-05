@@ -14,18 +14,20 @@ create the enemy script:
 ```lua
 --[[ in new script for enemy ]]
 
-function g.initPlayer()
+function g.initExample()
 
 	-- create a component
-	g.c.EnemyName = g.w.component()
+	g.c.Example = g.w.component()
 
 	-- enemy constructer. X is default but make it whatever you want
-	function g.new.EnemyName(x)
+	function g.new.Example(x)
 
 		local e = g.w.entity()
-		local ene = g.c.EnemyName({--[[whatever]]})
+		-- creating all the components as locals beforehand means they can be called in functions
+		local exa = g.c.Example({--[[whatever]]})
 		local pos = g.bc.new.Position(x, -8) -- minus height
 		local vel = g.bc.new.Velocity(0, 0)
+		local ene = g.bc.new.Enemy()
 		
 		local hea = g.c.new.Health(c.h,
 		-- auto kills on death. To be replaced. Replace with whatever u want
@@ -40,7 +42,10 @@ function g.initPlayer()
 		
 		-- adding components at the end means comps can be used in functions
 		e += ene
+		e += exa
 		e += pos
+		e += vel
+		e += hea
 		return e
 	end
 	
@@ -74,7 +79,7 @@ found in `src/components.lua`
 easy health component which automatically drains when a character is hit
 
 `new.Health(max, onHurt, val)`
-# `Tick`
+## `Tick`
 contains a timer which ticks down if above zero. Time must be set manually on every tick
 
 `new.Tick(t, onTick)`
@@ -89,6 +94,11 @@ inherits `Circle` class from `pico-badger` for collisions
 - `dam`: damage of hitbox. Default: 1
 - `team`: cannot damage same team unless `nil`
 - `onHurt`: called when hit or hurt. Default: `nil`
+## `Enemy`
+enemy functionality. Currently:
+- deletes an enemy once it has left the screen and hurts the game's health value
+### System: `EnemySystem()`
+uses `Enemy` and `Position`
 ### System: `HitSystem()`
 uses `Hitbox` and `Position`
 queries `Hurtbox` and `Position`
