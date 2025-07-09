@@ -1,4 +1,92 @@
 prototypes are ordered where higher headings are newer
+# 06-07 Spawn Manager First Plan
+a list which spawns characters, where a condition must be met for the wave to be spawned and the spawner to move on
+- enemies have values which are taken when defeated. The condition is a certain value. The score resets to zero on surpass
+- conditions where, if not met, go to another specified wave
+- time condition
+- simple all enemies defeated condition or specific enemy defeated condition
+- spawn the next wave only if a specific enemy has been defeated
+- a condition which skips ahead to another condition
+
+this means that conditions:
+- may sometimes need to know about each other
+	- stored condition: if going back to a previous condition, store this one. Perhaps a range is specified which it sticks to. Too restrictive, complicated and prone to problems?
+	- conditions can call other conditions. Perhaps the manager has a call condition function which it uses by default on the current condition but can be called and used when passed through the condition functions to call a later one
+	- perhaps they don't. Could conditions contain spawn managers?
+	- or maybe their state is always present. Therefore they can just store and skip to a different conditions if not fulfilled. But, then how would the value spawner work?
+	- not much state is needed. Perhaps a simpler way would be to just give the manager a value variable with conditions that just return true and save. The enemy component can just be given a value property
+	- a separate scorer can be created which attaches value with a custom component on spawn
+
+each condition should be:
+- a class which inherits from a base class
+- have a constructer which makes generation easy
+
+the base class constructer should have params:
+- each delegate takes in the spawn manager class
+- condition delegate: runs a function and returns true or false
+- success delegate: if condition delegate is true
+	- default: spawn whole wave and increase counter
+- fail delegate: if condition delegate is false
+	- default: nothing
+
+therefore, there should be functions for:
+- spawn enemy(index, x):
+	- each enemy is given an index
+	- creates the enemy and returns it
+- spawn map line (x, y): 
+	- spawns a wave of enemies based on the specified line placing the tiles into the spawn enemy function
+	- y is the y value of the specified line
+	- x is multiplied by 16 for ease of use
+	- returns a list of the spawned enemies
+- spawn player():
+	- creates the player
+## spawn manager
+class which takes in a list of spawn conditions and gets to freaking work on them. Params:
+- spawn conditions list
+
+properties:
+- spawn list
+- start(): starts/ un pauses the spawning. NOT started automatically
+- pause(): pauses the spawning
+- clear(): removes all current conditions from the spawn list and reset the current condition index to 0
+- run condition(index): calls this condition. Does this by default every frame on the current condition index. This can therefore be called by conditions to check other conditions
+- current condition: the index of the current condition being checked every frame
+## so a level would go like...
+1. first spawn condition is a timer which spawns the first wave after a set amount of time
+2. then...
+	- spawn the next wave on a timer
+	- introduce an enemy by spawning it and only moving on once it has been defeated
+	- keep spawning a set of waves on loop until a condition is defeated like defeating a specific character
+	- spawn a wave. Then, after some of the wave is defeated, spawn the next sub wave
+3. finally, tell the game that it has finished on the last condition after a short time has passed
+## finalisation of spawn conditions to try out
+### utility
+timer
+- prevents moving onto the next object until a time is met
+
+moves onto the specified condition when
+- time
+- x, y: row position to spawn
+
+value condition:
+- contains an internal value variable
+- if the value has met a threshold, allow skipping to the next condition. Otherwise, go back to a specified condition
+
+clear:
+- clears the spawn queue
+- on clear function does something
+- can be used for memory management or ending the game
+### spawners
+spawn
+- x, y: row position to spawn
+
+death condition:
+- spawns an enemy
+- if the enemy has been defeated yet, go to a specific condition
+- otherwise, go to another
+
+value spawner:
+- spawns enemies and gives them on death components which add score to the specified value condition on death
 # 27-05 initial character prototype
 player character controller and a concept of an enemy
 ## evaluation
