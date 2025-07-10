@@ -8,7 +8,7 @@ function g.initBullet()
     -- some of this is in the conf file
     local c = {
 
-        bbt = conf.p.stunHur * 2, -- bullet block time
+        bbt = conf.p.stunHur, -- bullet block time
     }
     
     
@@ -28,7 +28,7 @@ function g.initBullet()
         if parry then
 
             b += g.c.new.Parryable(team or 1, -r, -r, r * 2, r * 2,
-                function (me, you) b += g.bc.new.Delete() end)
+                function (me, you) g.bc.tryDelete(me) end)
         end
         
         return b

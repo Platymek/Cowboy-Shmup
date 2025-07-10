@@ -40,8 +40,15 @@ function g:init()
     g.ss = g.initSpawnSystem()
     g.initSpawners(g.ss) 
     g.sm = g.ss.new.SpawnManager()
-    g.sm:add(g.ss.new.Timer(2))
-    g.sm:add(g.ss.new.Spawn(7, 8))
+
+    g.sm:add(g.ss.new.Spawn(7, 4))
+    g.sm:add(g.ss.new.Spawn(7, 4))
+    
+    g.sm:add(g.ss.new.Timer(4))
+    g.sm:add(g.ss.new.Spawn(7, 4))
+    g.sm:add(g.ss.new.Timer(4))
+    g.sm:add(g.ss.new.Spawn(7, 9))
+    g.sm:add(g.ss.new.DeaCon(10, 7, -4))
 
     g.p = g.new.Player(64, 64,
     function (val) g.hud.health = val end,

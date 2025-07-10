@@ -11,7 +11,7 @@ function g.initBandit()
 
         s = 1, -- startup time
         b = 1.4, -- bullet time
-        sp = 6, -- speed
+        sp = 12, -- speed
         bsp = 32, -- bullet speed
         h = 3 -- health
     }

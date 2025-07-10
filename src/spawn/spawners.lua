@@ -24,7 +24,7 @@ function g.initSpawners(ss)
                 return t <= 0
             end,
 
-            function(self, sm)
+            function(self, sm, dt) 
 
                 t = time
                 sm.i += 1
@@ -36,13 +36,43 @@ function g.initSpawners(ss)
 
     function ss.new.Spawn(i, x)
 
-        local c
-
         return ss.new.SpawnCond(
 
             function(self, sm, dt) return true end,
-            function(self, sm) ss.spawn(i, x) end,
+
+            function(self, sm)
+
+                ss.spawn(i, x) 
+                sm.i += 1
+            end,
             nil
+        )
+    end
+
+    -- death condition
+    -- i: spawn index, x: x position, r: relative index shift on false
+    function ss.new.DeaCon(i, x, r)
+
+        local c
+        local s = false -- has spawned yet
+
+        return ss.new.SpawnCond(
+
+            function(self, sm, dt)
+
+                if not s then 
+
+                    c = ss.spawn(i, x)
+                    s = true
+                end
+
+                return c ~= nil
+            end,
+
+            function(self, sm) sm.i += 1 end,
+            function(self, sm)
+                sm.i += r
+            end
         )
     end
 end
