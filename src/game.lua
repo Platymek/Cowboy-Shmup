@@ -9,6 +9,8 @@ g = {
     Health = nil, -- health
     hurt= nil,
 
+    ss = nil, -- spawn system
+
     bllBlkTimer = 0, -- bullet block timer
 
     -- current demo vars:
@@ -35,17 +37,16 @@ function g:init()
     g.initKennel()
     g.initSumo()
 
-    g.p = g.new.Player(64, 64, 
+    g.ss = g.initSpawnSystem()
+    g.initSpawners(g.ss) 
+    g.sm = g.ss.new.SpawnManager()
+    g.sm:add(g.ss.new.Timer(2))
+    g.sm:add(g.ss.new.Spawn(7, 8))
+
+    g.p = g.new.Player(64, 64,
     function (val) g.hud.health = val end,
     function (val) g.hud.ammo   = val end)
-end
-
-function g:deinit()
-    
-    g.w = nil
-    g.bc = nil
-    g.c = nil
-end
+end 
 
 function g:update(dt)
     
@@ -62,41 +63,6 @@ function g:update(dt)
     g.c.HitSystem()
     g.c.BulletDeleteSystem(dt)
     g.bc.DeleteSystem()
-
-
-    -- sample spawning code
-    if g.ce < g.e then
-
-        g.t -= dt
-
-        if g.t <= 0 then
-
-            for i = 0, 16 do
-
-                local m = mget(i, g.ce)
-
-                if m == 7 then
-
-                    g.new.Bandit(i * 8 + 8)
-
-                elseif m == 8 then
-
-                    g.new.Dog(i * 8 + 8)
-
-                elseif m == 9 then
-
-                    g.new.Kennel(i * 8 + 8)
-
-                elseif m == 10 then
-
-                    g.new.Sumo(i * 8 + 8)
-                end
-            end
-
-            g.t = g.sr
-            g.ce += 1
-        end
-    end
 end
 
 function g:draw(dt)
@@ -112,6 +78,7 @@ function g:draw(dt)
     hb:draw (11, pos.x, pos.y, true)
     --if par then par:draw(11, pos.x, pos.y, false) end
     g.hud:draw()
+    g.sm:update(dt)
     --print(g.ce, nil, nil, 7)
 
     --for _, e in pairs(g.w.query({g.c.Kennel})) do

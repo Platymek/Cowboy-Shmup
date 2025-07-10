@@ -23,7 +23,7 @@ each condition should be:
 
 the base class constructer should have params:
 - each delegate takes in the spawn manager class
-- condition delegate: runs a function and returns true or false
+- condition delegate: runs a function and returns true or false if successful
 - success delegate: if condition delegate is true
 	- default: spawn whole wave and increase counter
 - fail delegate: if condition delegate is false

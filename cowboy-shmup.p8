@@ -17,6 +17,9 @@ __lua__
 #include src/kennel.lua
 #include src/sumo.lua
 
+#include src/spawn/spawnSystem.lua
+#include src/spawn/spawners.lua
+
 
 -- ⬅️➡️⬆️⬇️🅾️❎
 function _init()

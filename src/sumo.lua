@@ -46,8 +46,8 @@ function g.initSumo()
             
         local hur = g.c.new.Hurtbox(1, 8, nil, nil, function () sum:setState(2) end)
         
-        local hea = g.c.new.Health(c.h, 
-        function (val) if val == 0 then e += g.bc.new.Delete() end end)
+        local hea = g.c.new.Health(c.h,
+        function (val) if val == 0 then g.bc.tryDelete(e) end end)
 
         sum.setState = function (self, state)
 

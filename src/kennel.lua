@@ -33,7 +33,7 @@ function g.initKennel()
         e += g.bc.new.Position(x, -16)
         e += g.bc.new.Velocity(0,c.sp)
         e += g.c.new.Health(c.h,
-        function (val) if val == 0 then e += g.bc.new.Delete() end end)
+        function (val) if val == 0 then g.bc.tryDelete(e) end end)
 
         return e
     end

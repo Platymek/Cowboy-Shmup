@@ -55,7 +55,7 @@ function g.initBullet()
             -- if bullet goes off screen, delete
             if p.x < -b.r or p.x > 128 + b.r or p.y < -b.r or p.y > 128 + b.r then
 
-                e += g.bc.new.Delete()
+                g.bc.tryDelete(e)
             end
         end
     end
