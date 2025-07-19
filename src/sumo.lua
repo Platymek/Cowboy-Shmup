@@ -16,7 +16,7 @@ function g.initSumo()
         std=0.4, -- stun duration
 
         brd= 48, -- break distance
-        brs= 32, -- break speed
+        brs= 64, -- break speed
 
         flf=  4, -- flip shoot offset
         shf=  6, -- shoot offset

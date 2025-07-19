@@ -11,27 +11,26 @@ function getGameComponents(w, bc)
 
     c.Health = w.component()
 
+    local function hurt(self, val)
+
+        self.val -= val or 1
+
+        if self.val < 0 then
+            self.val = 0
+        end
+
+        if self.onHurt then call(self.onHurt, self.val) end
+    end
+
     function c.new.Health(max, onHurt, val)
 
-        local h = c.Health({
+        return c.Health({
         
             max = max,          -- maximum health
             onHurt = onHurt,    -- func/s to call when hurt
             val = val or max,   -- current health
-
-            hurt = function (self, val)
-
-                self.val -= val or 1
-
-                if self.val < 0 then
-                    self.val = 0
-                end
-
-                if self.onHurt then call(self.onHurt, self.val) end
-            end,
+            hurt = hurt,
         })
-
-        return h
     end
 
 
@@ -129,7 +128,7 @@ function getGameComponents(w, bc)
         return c.Enemy({
 
             passPos = passPos or 128 + 8,
-            onPass = onPass or g.hurt,
+            onPass = onPass or function (e) g.hurt() end,
         })
     end
     

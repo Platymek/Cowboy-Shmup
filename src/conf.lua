@@ -9,8 +9,8 @@ conf = {
         stunSho = 0.2,  -- stun duration on shoot
         cancSho = 0.1,  -- cancel shoot duration
 
-        stunHur = 2, -- stun duration on hurt
-        backHur = 16, -- knockback distance on hurt
+        stunHur = 1, -- stun duration on hurt
+        backHur = 0, -- knockback distance on hurt
 
         speed   = 40,
         maxAmmo = 6,

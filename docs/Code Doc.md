@@ -9,7 +9,7 @@ where functions ask for team values, this is what each one corresponds to so far
 | 0     | player                                            |
 | 1     | enemy                                             |
 
-## adding an enemy
+## creating a new enemy type
 create the enemy script:
 ```lua
 --[[ in new script for enemy ]]
@@ -184,3 +184,46 @@ basic enemy character
 - no `y` because enemy always spawns at top of screen
 ### System: `g.c.EnemySystem(dt)`
 enemy system. Expects enemy to have all components added in `new` function
+# spawn management
+## create a spawn manager
+1. initialise the spawn system: `g.initSpawnSystem`, which returns a table
+2. use this table to initialise the different types of spawners: `g.initSpawner(table)`
+3. then use the table from step 1 to create a new spawn manager: `table.ss.new.SpawnManager()`
+4. add spawn conditions using: `spawn manager:add(condition/s)`
+
+currently, the spawn system table is stored in `g.ss` and the spawn manager in `g.sm`
+## spawn conditions
+various types of spawn conditions can be added to the manager for different effects. These spawn conditions are currently found in `g.ss.new`
+### timer
+goes to next condition when the timer runs out
+
+`g.ss.new.Timer(time)`
+- `time`: time till timeout
+### Spawn
+spawns the specified character at the specified x and goes to next condition
+
+`g.ss.new.Spawn(i, x)`
+- `i`: the index of the enemy to spawn. Use the `ene` enum for readability
+- `x`: the x tile to spawn them on
+### Skip
+increments the current condition
+
+`g.ss.new.Skip(i)`
+- `i`: how much to increment by
+### Death Condition
+spawns a character and skips backwards until it is defeated
+
+`g.ss.new.DeaCon(i, x, r)`
+- `i`: the index of the enemy to spawn. Use the `ene` enum for readability
+- `x`: the x tile to spawn them on
+- `r`: how much to increment back if the character has not spawned yet 
+### creating a custom spawn condition
+custom spawn conditions can be created for custom properties. All currently existing spawn conditions use this same method:
+
+`g.ss.new.SpawnCond([cond, success, fail])`
+- `cond`: the condition function. Should return `true` if the condition succeeds
+	- `nil`: the condition is assumed true
+- `success`: a function to be performed on success
+	- `nil`: increments the current spawn condition by 1
+- `fail`: a function to be performed on success
+	- `nil`: is ignored on false

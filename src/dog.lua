@@ -26,14 +26,6 @@ function g.initDog()
 
         local dog = g.c.Dog()
 
-        e += g.c.new.Tick(c.b, function (self)
-
-            self.t = c.b
-
-            local pos = e[g.bc.Position]
-            g:shoot(pos.x, pos.y, 2, 0.25, c.sp * 0.75)
-        end)
-
         e += dog
 
         return e

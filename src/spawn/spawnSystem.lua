@@ -33,7 +33,7 @@ function g.initSpawnSystem()
 
                 local spa = self.sList[self.i]
 
-                local s = false
+                local s = true
                 if spa.cond then s = spa:cond(self, dt) end
 
                 if s then

@@ -6,7 +6,7 @@ g = {
     c   = nil, -- Game Components
     new =  {}, -- New Entities
     hud = nil,
-    Health = nil, -- health
+    h = 3, -- health
     hurt= nil,
 
     ss = nil, -- spawn system
@@ -27,8 +27,10 @@ function g:init()
     g.c  = getGameComponents(g.w, g.bc)
     g.hud= initHud(conf.p.maxAmmo, conf.p.maxHealth)
 
-    g.Health = g.c.new.Health(conf.p.maxHealth, function(val) g.hud.health = val end)
-    g.hurt = function() g.Health:hurt(1) end
+    g.hurt = function()
+        g.h -= 1
+        g.hud.health = g.h
+    end
 
     g.initBullet()
     g.initPlayer()
@@ -41,14 +43,41 @@ function g:init()
     g.initSpawners(g.ss) 
     g.sm = g.ss.new.SpawnManager()
 
-    g.sm:add(g.ss.new.Spawn(7, 4))
-    g.sm:add(g.ss.new.Spawn(7, 4))
-    
-    g.sm:add(g.ss.new.Timer(4))
-    g.sm:add(g.ss.new.Spawn(7, 4))
-    g.sm:add(g.ss.new.Timer(4))
-    g.sm:add(g.ss.new.Spawn(7, 9))
-    g.sm:add(g.ss.new.DeaCon(10, 7, -4))
+    local reset
+
+    local function createResetCondition()
+
+        return g.ss.new.SpawnCond(
+
+            nil,
+            function(self, sm) reset(sm) end,
+            nil
+        )
+    end
+
+    reset = function(sm)
+
+        sm:clear()
+        
+        sm:add(
+
+            g.ss.new.Skip(7),
+
+            g.ss.new.Timer(4),
+            g.ss.new.Spawn(ene.Dog, 9),
+            g.ss.new.Spawn(ene.Bandit, 4),
+
+            g.ss.new.Timer(4),
+            g.ss.new.Spawn(ene.Dog, 4),
+            g.ss.new.Spawn(ene.Bandit, 9),
+
+            g.ss.new.DeaCon(ene.Sumo, 7, -6),
+
+            createResetCondition()
+        )
+    end
+
+    reset(g.sm)
 
     g.p = g.new.Player(64, 64,
     function (val) g.hud.health = val end,
@@ -86,6 +115,8 @@ function g:draw(dt)
     --if par then par:draw(11, pos.x, pos.y, false) end
     g.hud:draw()
     g.sm:update(dt)
+
+    --print(g.sm.i .. ", " .. #g.sm.sList, nil, nil, 7)
     --print(g.ce, nil, nil, 7)
 
     --for _, e in pairs(g.w.query({g.c.Kennel})) do

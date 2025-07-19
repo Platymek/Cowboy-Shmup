@@ -1,18 +1,27 @@
 
 function g.initSpawners(ss)
 
+    ene = {
+
+        Bandit = 7,
+        Dog    = 8,
+        Kennel = 9,
+        Sumo   = 10,
+    }
+
     local spawn = {
 
-        [7]  = function(x) return g.new.Bandit (x * 8 + 8) end,
-        [8]  = function(x) return g.new.Dog    (x * 8 + 8) end,
-        [9]  = function(x) return g.new.Kennel (x * 8 + 8) end,
-        [10] = function(x) return g.new.Sumo   (x * 8 + 8) end,
+        [ene.Bandit]= function(x) return g.new.Bandit (x * 8 + 8) end,
+        [ene.Dog]   = function(x) return g.new.Dog    (x * 8 + 8) end,
+        [ene.Kennel]= function(x) return g.new.Kennel (x * 8 + 8) end,
+        [ene.Sumo]  = function(x) return g.new.Sumo   (x * 8 + 8) end,
     }
 
     function ss.spawn(index, x)
         return spawn[index](x)
     end
 
+    -- pause for a set time, then next condition
     function ss.new.Timer(time)
 
         local t = time
@@ -34,12 +43,12 @@ function g.initSpawners(ss)
         )
     end
 
+    -- spawn a new enemy, i: spawn index, x: x position
     function ss.new.Spawn(i, x)
 
         return ss.new.SpawnCond(
 
-            function(self, sm, dt) return true end,
-
+            nil,
             function(self, sm)
 
                 ss.spawn(i, x) 
@@ -49,11 +58,22 @@ function g.initSpawners(ss)
         )
     end
 
+    -- increments spawn index by i
+    function ss.new.Skip(i)
+    
+        return ss.new.SpawnCond(
+
+            nil,
+            function(self, sm) sm.i += i end,
+            nil
+        )
+    end
+
     -- death condition
     -- i: spawn index, x: x position, r: relative index shift on false
     function ss.new.DeaCon(i, x, r)
 
-        local c
+        local d = false -- has died yet
         local s = false -- has spawned yet
 
         return ss.new.SpawnCond(
@@ -63,16 +83,23 @@ function g.initSpawners(ss)
                 if not s then 
 
                     c = ss.spawn(i, x)
+
+                    -- on delete, fulfill condition
+                    local f = function () d = true end
+                    
+                    local od= c[g.bc.OnDel]
+                    
+                    if not c[g.bc.OnDel] then c += g.bc.new.OnDel(f) 
+                    else od.onDelete[#od.onDelete + 1] = f end
+
                     s = true
                 end
 
-                return c ~= nil
+                return d
             end,
 
-            function(self, sm) sm.i += 1 end,
-            function(self, sm)
-                sm.i += r
-            end
+            nil,
+            function(self, sm) sm.i += r end
         )
     end
 end
