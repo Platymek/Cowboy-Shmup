@@ -68,7 +68,7 @@ function g.initBullet()
 
             local p = e[g.bc.Position]
             local b = e[g.c.Bullet]
-            Circle:new(b.r + 1, p.x, p.y):draw(b.c)
+            Circle:new(b.r + 2, p.x, p.y):draw(b.c)
         end
 
         for _, e in pairs(q) do

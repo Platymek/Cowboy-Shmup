@@ -86,11 +86,7 @@ function g.initSpawners(ss)
 
                     -- on delete, fulfill condition
                     local f = function () d = true end
-                    
-                    local od= c[g.bc.OnDel]
-                    
-                    if not c[g.bc.OnDel] then c += g.bc.new.OnDel(f) 
-                    else od.onDelete[#od.onDelete + 1] = f end
+                    g.bc.addOnDel(c, f)
 
                     s = true
                 end

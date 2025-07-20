@@ -25,6 +25,8 @@ conf = {
         ammRel = 1, -- amount to reload
         ammPar = 2, -- amount parrying reloads
 
+        bsp = 128 * 1.5, -- bullet speed
+
         -- bullet clear distance
         bcDist = 32,
     },

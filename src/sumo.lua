@@ -7,13 +7,13 @@ function g.initSumo()
     local c = {
 
         sp = 24, -- speed
-        h  = 12, -- health
+        h  = 8, -- health
 
         di = 16, -- slap distance
         fr =  1, -- freeze during slap duration 
 
         sth=  3, -- stun health (amount of shots before stun)
-        std=0.4, -- stun duration
+        std=0.8, -- stun duration
 
         brd= 48, -- break distance
         brs= 64, -- break speed
@@ -69,9 +69,9 @@ function g.initSumo()
                 if pos.y < 16 then return self:setState(0) end
 
                 local off = (self.flip and -c.flf or c.flf)
-                g:shoot(pos.x + off - c.shf, pos.y + 8, 2, 0.25 + conf.aimOff / 2, c.bsp)
-                g:shoot(pos.x + off, pos.y + 8, 2, 0.25, c.bsp)
-                g:shoot(pos.x + off + c.shf, pos.y + 8, 2, 0.25 - conf.aimOff / 2, c.bsp)
+                g:shoot(pos.x + off - c.shf, pos.y + 8, conf.b.sml, 0.25 + conf.aimOff / 2, c.bsp)
+                g:shoot(pos.x + off, pos.y + 8, conf.b.sml, 0.25, c.bsp)
+                g:shoot(pos.x + off + c.shf, pos.y + 8, conf.b.sml, 0.25 - conf.aimOff / 2, c.bsp)
 
                 self.flip = not self.flip
                 sum.t = c.fr

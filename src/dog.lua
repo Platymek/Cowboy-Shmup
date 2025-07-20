@@ -9,7 +9,6 @@ function g.initDog()
 
         sp = 32, -- speed
         h  =  1, -- health
-        b  =  1, -- bullet rate
     }
 
     function g.new.Dog(x, y)
@@ -23,10 +22,7 @@ function g.initDog()
         e += g.c .new.Health(c.h,
         function (val) if val == 0 then g.bc.tryDelete(e) end end)
         e += g.c .new.Enemy()
-
-        local dog = g.c.Dog()
-
-        e += dog
+        e += g.c .Dog()
 
         return e
     end

@@ -37,6 +37,7 @@ function g.initPlayer()
         local p = g.w.entity()
         local pos = g.bc.new.Position(x, y)
         local vel = g.bc.new.Velocity()
+        local canShoot = true
         
         p += pos
         p += vel
@@ -71,7 +72,7 @@ function g.initPlayer()
                     self.buff = 0
 
                     -- only shoot if enough ammo
-                    if (self.action >= 3 and self.ammo > 0) or 
+                    if (self.action >= 3 and self.ammo > 0 and canShoot) or 
                         self.action == 1 then
 
                         self:setState(self.action)
@@ -144,10 +145,17 @@ function g.initPlayer()
                     
                     -- shoot bullet
                     local pos = p[g.bc.Position]
-                    g.new.Bullet(
-                        pos.x, pos.y - 8, 2,
+                    local b = g.new.Bullet(
+                        pos.x, pos.y - 8, conf.b.med,
                         0.75 + (enter - 4) * conf.aimOff,
-                        128, 7, 8, 0)
+                        conf.p.bsp, 7, 8, 0)
+
+                    canShoot = false
+
+                    g.bc.addOnDel(b, function()
+
+                        canShoot = true
+                    end)
                 end
             end,
         })
@@ -187,7 +195,6 @@ function g.initPlayer()
 
 
         -- action buffering
-
         if pla.buff > 0 then pla.buff -= dt end
 
         if not pla.pressed then
@@ -243,22 +250,27 @@ function g.initPlayer()
                 end
             end
 
-        elseif pla.stun > 0 then
+        -- not shooting
+        elseif true then
 
-            pla.stun -= dt
-            
-            -- reload animation
-            if pla.state == 1 then
+            -- if stunned and not shooting
+            if pla.stun > 0 then
 
-                -- slide gun from left to right, stopping when can cancel
-                gs.x = 4 + -16 * max((pla.stun - conf.p.cancRel) / (conf.p.stunRel - conf.p.cancRel), 0)
+                pla.stun -= dt
+                
+                -- reload animation
+                if pla.state == 1 then
+
+                    -- slide gun from left to right, stopping when can cancel
+                    gs.x = 4 + -16 * max((pla.stun - conf.p.cancRel) / (conf.p.stunRel - conf.p.cancRel), 0)
+                end
+
+                -- cancel reload or shoot based on cancel period
+                if pla.stun <= (pla.state == 1 and conf.p.cancRel or conf.p.cancSho)
+                then pla:checkBuff() end
+            else
+                pla:setState(0)
             end
-
-            -- cancel reload or shoot based on cancel period
-            if pla.stun <= (pla.state == 1 and conf.p.cancRel or conf.p.cancSho)
-            then pla:checkBuff() end
-        else
-            pla:setState(0)
         end
     end)
 end
