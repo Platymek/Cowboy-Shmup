@@ -16,6 +16,7 @@ __lua__
 #include src/dog.lua
 #include src/kennel.lua
 #include src/sumo.lua
+#include src/option.lua
 
 #include src/spawn/spawnSystem.lua
 #include src/spawn/spawners.lua

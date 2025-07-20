@@ -49,9 +49,9 @@ function g.initExample()
 		return e
 	end
 	
-	g.c.SumoSystem = g.w.system({g.c.Sumo},
+	g.c.ExampleSystem = g.w.system({g.c.Example},
 	-- function which runs update loop
-	function(e, dt) e[g.c.Sumo]:update(dt) end)
+	function(e, dt) e[g.c.Example]:update(dt) end)
 	
 	-- sometimes the system isn't needed depending on how simple the entity is
 end
@@ -176,14 +176,15 @@ player character
 - these two functions are primarily used to update the hud info
 ### System: `g.c.PlayerSystem(dt)`
 player system. Expects the player to have all the components added in the `new` function
-## Enemy
-basic enemy character
+## Option
+In place of menus, the game uses pieces of text which can be shot. when shot, the specified function is run
 
-`g.new.enemy(x)`
-- `x`: spawns enemy at x
-- no `y` because enemy always spawns at top of screen
-### System: `g.c.EnemySystem(dt)`
-enemy system. Expects enemy to have all components added in `new` function
+`g.new.Opt(x, y, text, onHit)`
+- `x, y`: the x and y position of the option
+- `text`: the text to display
+- `onHit`: the function to run when hit
+### System: `g.c.OptGraphicSys()`
+draws the options to the screen
 # spawn management
 ## create a spawn manager
 1. initialise the spawn system: `g.initSpawnSystem`, which returns a table

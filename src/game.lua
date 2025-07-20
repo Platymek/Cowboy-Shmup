@@ -27,17 +27,13 @@ function g:init()
     g.c  = getGameComponents(g.w, g.bc)
     g.hud= initHud(conf.p.maxAmmo, conf.p.maxHealth)
 
-    g.hurt = function()
-        g.h -= 1
-        g.hud.health = g.h
-    end
-
     g.initBullet()
     g.initPlayer()
     g.initBandit()
     g.initDog()
     g.initKennel()
     g.initSumo()
+    g.initOpt()
 
     g.ss = g.initSpawnSystem()
     g.initSpawners(g.ss) 
@@ -50,7 +46,10 @@ function g:init()
         return g.ss.new.SpawnCond(
 
             nil,
-            function(self, sm) reset(sm) end,
+            function(self, sm) 
+
+                reset(sm)
+            end,
             nil
         )
     end
@@ -77,11 +76,75 @@ function g:init()
         )
     end
 
-    reset(g.sm)
+    g.sm:add(
+        g.ss.new.SpawnCond(
+
+            nil,
+            function(self, sm) 
+
+                local op
+
+                op = g.new.Opt(16, 16, "play", function() 
+
+                    reset(g.sm)
+                    g.bc.tryDelete(op)
+                end)
+
+                sm.i += 1
+            end,
+            nil
+        )
+    )
 
     g.p = g.new.Player(64, 64,
     function (val) g.hud.health = val end,
     function (val) g.hud.ammo   = val end)
+    
+    g.hurt = function()
+
+        g.h -= 1
+        g.hud.health = g.h
+
+        if g.h <= 0 then
+
+            for _, e in pairs(g.w.query({g.c.Enemy})) do
+
+                g.bc.tryDelete(e)
+            end
+
+            for _, e in pairs(g.w.query({g.c.Bullet})) do
+
+                g.bc.tryDelete(e)
+            end
+
+            g.sm:clear()
+
+            g.sm:add(
+
+                g.ss.new.Timer(2),
+
+                g.ss.new.SpawnCond(
+
+                    nil,
+                    function(self, sm) 
+                        
+                        local op
+
+                        op = g.new.Opt(16, 16, "retry", function() 
+
+                            reset(g.sm)
+                            g.bc.tryDelete(op)
+                        end)
+
+                        sm.i += 1
+                        g.h = 3
+                        g.hud.health = g.h
+                    end,
+                    nil
+                )
+            )
+        end
+    end
 end 
 
 function g:update(dt)
@@ -104,6 +167,7 @@ end
 function g:draw(dt)
     
     cls(3)
+    g.c.OptGraphicSys()
     g.bc.GraphicsSystem()
     g.c.BulletGraphicsSystem()
 
@@ -111,12 +175,12 @@ function g:draw(dt)
     local hb  = g.p[g.c.Hurtbox]
     local par = g.p[g.c.ParryDetector]
 
-    hb:draw (11, pos.x, pos.y, true)
+    hb:draw(11, pos.x, pos.y, true)
     --if par then par:draw(11, pos.x, pos.y, false) end
     g.hud:draw()
     g.sm:update(dt)
 
-    --print(g.sm.i .. ", " .. #g.sm.sList, nil, nil, 7)
+    print(g.sm.i .. ", " .. #g.sm.sList, nil, nil, 7)
     --print(g.ce, nil, nil, 7)
 
     --for _, e in pairs(g.w.query({g.c.Kennel})) do

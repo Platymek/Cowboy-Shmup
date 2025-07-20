@@ -46,7 +46,7 @@ function getGameComponents(w, bc)
         local h = box({
 
             team = team,     -- team of the hitbox
-            onHurt = onHurt, -- function to call when hitbox hurts something
+            onHurt = asTable(onHurt), -- function to call when hitbox hurts something
         })
 
         setmetatable(h, {__index = cir})
@@ -82,7 +82,7 @@ function getGameComponents(w, bc)
         local p = par({
         
             team = team,     -- team of the parryable
-            onParry = onParry, -- function to call when parried
+            onParry = asTable(onParry), -- function to call when parried
         })
 
 		setmetatable(p, {__index = rect})
