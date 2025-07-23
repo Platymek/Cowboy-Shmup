@@ -18,7 +18,16 @@ function g.initSpawners(ss)
     }
 
     function ss.spawn(index, x)
+
         return spawn[index](x)
+    end
+
+    function ss.spawnLine(mx, my, x)
+
+        for i = 0, 16 do
+        
+            spawn[mget(mx * 16 + i, my)](x)
+        end
     end
 
     -- pause for a set time, then next condition
@@ -55,6 +64,18 @@ function g.initSpawners(ss)
                 sm.i += 1
             end,
             nil
+        )
+    end
+
+    function ss.new.SpawnLine(mx, my)
+    
+        return ss.new.SpawnCond(
+
+            nil,
+            function(self, sm)
+
+                ss.spawnLine(mx, my)
+            end
         )
     end
 

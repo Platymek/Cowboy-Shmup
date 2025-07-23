@@ -20,6 +20,7 @@ __lua__
 
 #include src/spawn/spawnSystem.lua
 #include src/spawn/spawners.lua
+#include src/waves.lua
 
 
 -- ⬅️➡️⬆️⬇️🅾️❎

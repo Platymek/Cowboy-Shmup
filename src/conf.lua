@@ -40,8 +40,8 @@ conf = {
     b = { -- bullet
 
         -- sizes
-        sml = 1,
-        med = 2,
+        sml = 0.5,
+        med = 1,
         lrg = 4,
 
         -- colors

@@ -19,7 +19,7 @@ function g.initSumo()
         brs= 64, -- break speed
 
         flf=  4, -- flip shoot offset
-        shf=  6, -- shoot offset
+        shf=  8, -- shoot offset
         bsp= 48, -- bullet speed
     }
 
