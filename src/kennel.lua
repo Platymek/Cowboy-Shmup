@@ -11,7 +11,7 @@ function g.initKennel()
         -- startup
         s  = 2,
         -- dog rate
-        d  = 6,
+        d  = 3,
         -- health
         h  = 8,
     }
@@ -24,7 +24,7 @@ function g.initKennel()
 
         e = g.w.entity()
 
-        e += g.c.Kennel({d = c.d, s = c.s})
+        e += g.c.Kennel({d = c.s, s = c.s})
         
         e += g.bc.new.SpriteGroup(
             Sprite:new(18, -8, -8, 1, 2), 
@@ -60,13 +60,12 @@ function g.initKennel()
 
             ken.d -= dt
 
-            if ken.d < 0 then
+        elseif ken.d <= 0 then
 
-                ken.d = c.d
+            ken.d = c.d
 
-                local pos = e[g.bc.Position]
-                g.new.Dog(pos.x)[g.bc.Position].y = pos.y
-            end
+            local pos = e[g.bc.Position]
+            g.new.Dog(pos.x)[g.bc.Position].y = pos.y
         end
     end)
 end

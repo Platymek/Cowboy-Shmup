@@ -146,7 +146,7 @@ function g.initPlayer()
                     -- shoot bullet
                     local pos = p[g.bc.Position]
                     local b = g.new.Bullet(
-                        pos.x, pos.y - 8, conf.b.med,
+                        pos.x, pos.y - 8, conf.b.lrg,
                         0.75 + (enter - 4) * conf.aimOff,
                         conf.p.bsp, 7, 8, 0)
 

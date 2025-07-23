@@ -42,7 +42,7 @@ conf = {
         -- sizes
         sml = 0.5,
         med = 1,
-        lrg = 4,
+        lrg = 2,
 
         -- colors
         eno = 8, -- enemy outer

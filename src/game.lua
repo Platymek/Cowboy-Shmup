@@ -39,43 +39,10 @@ function g:init()
     g.initSpawners(g.ss) 
     g.sm = g.ss.new.SpawnManager()
 
-    local reset
-
-    local function createResetCondition()
-
-        return g.ss.new.SpawnCond(
-
-            nil,
-            function(self, sm) 
-
-                reset(sm)
-            end,
-            nil
-        )
-    end
-
-    reset = function(sm)
-
-        sm:clear()
-        
-        sm:add(
-
-            g.ss.new.Skip(7),
-
-            g.ss.new.Timer(4),
-            g.ss.new.Spawn(ene.Dog, 9),
-            g.ss.new.Spawn(ene.Bandit, 4),
-
-            g.ss.new.Timer(4),
-            g.ss.new.Spawn(ene.Dog, 4),
-            g.ss.new.Spawn(ene.Bandit, 9),
-
-            g.ss.new.DeaCon(ene.Sumo, 7, -6),
-
-            createResetCondition()
-        )
-    end
-
+    g.p = g.new.Player(64, 64,
+    function (val) g.hud.health = val end,
+    function (val) g.hud.ammo   = val end)
+    
     g.sm:add(
         g.ss.new.SpawnCond(
 
@@ -86,7 +53,7 @@ function g:init()
 
                 op = g.new.Opt(16, 16, "play", function() 
 
-                    reset(g.sm)
+                    waves[1](g.sm)
                     g.bc.tryDelete(op)
                 end)
 
@@ -95,57 +62,53 @@ function g:init()
             nil
         )
     )
+end
 
-    g.p = g.new.Player(64, 64,
-    function (val) g.hud.health = val end,
-    function (val) g.hud.ammo   = val end)
-    
-    g.hurt = function()
+function g.hurt()
 
-        g.h -= 1
-        g.hud.health = g.h
+    g.h -= 1
+    g.hud.health = g.h
 
-        if g.h <= 0 then
+    if g.h <= 0 then
 
-            for _, e in pairs(g.w.query({g.c.Enemy})) do
+        for _, e in pairs(g.w.query({g.c.Enemy})) do
 
-                g.bc.tryDelete(e)
-            end
-
-            for _, e in pairs(g.w.query({g.c.Bullet})) do
-
-                g.bc.tryDelete(e)
-            end
-
-            g.sm:clear()
-
-            g.sm:add(
-
-                g.ss.new.Timer(2),
-
-                g.ss.new.SpawnCond(
-
-                    nil,
-                    function(self, sm) 
-                        
-                        local op
-
-                        op = g.new.Opt(16, 16, "retry", function() 
-
-                            reset(g.sm)
-                            g.bc.tryDelete(op)
-                        end)
-
-                        sm.i += 1
-                        g.h = 3
-                        g.hud.health = g.h
-                    end,
-                    nil
-                )
-            )
+            g.bc.tryDelete(e)
         end
+
+        for _, e in pairs(g.w.query({g.c.Bullet})) do
+
+            g.bc.tryDelete(e)
+        end
+
+        g.sm:clear()
+
+        g.sm:add(
+
+            g.ss.new.Timer(2),
+
+            g.ss.new.SpawnCond(
+
+                nil,
+                function(self, sm) 
+                    
+                    local op
+
+                    op = g.new.Opt(16, 16, "retry", function() 
+
+                        reset(g.sm)
+                        g.bc.tryDelete(op)
+                    end)
+
+                    sm.i += 1
+                    g.h = 3
+                    g.hud.health = g.h
+                end,
+                nil
+            )
+        )
     end
-end 
+end
 
 function g:update(dt)
     

@@ -22,11 +22,13 @@ function g.initSpawners(ss)
         return spawn[index](x)
     end
 
-    function ss.spawnLine(mx, my, x)
+    function ss.spawnLine(mx, my)
 
         for i = 0, 16 do
-        
-            spawn[mget(mx * 16 + i, my)](x)
+            
+            local s = spawn[mget(mx * 16 + i, my)]
+
+            if s then s(i) end
         end
     end
 
@@ -75,6 +77,7 @@ function g.initSpawners(ss)
             function(self, sm)
 
                 ss.spawnLine(mx, my)
+                sm.i += 1
             end
         )
     end
