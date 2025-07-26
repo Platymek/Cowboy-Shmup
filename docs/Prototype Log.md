@@ -1,5 +1,7 @@
 prototypes are ordered where higher headings are newer
-# 06-07 Spawn Manager First Plan
+# 07-26 first level draft
+started first level draft
+# 07-06 Spawn Manager First Plan
 a list which spawns characters, where a condition must be met for the wave to be spawned and the spawner to move on
 - enemies have values which are taken when defeated. The condition is a certain value. The score resets to zero on surpass
 - conditions where, if not met, go to another specified wave

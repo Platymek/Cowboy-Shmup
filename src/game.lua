@@ -53,7 +53,7 @@ function g:init()
 
                 op = g.new.Opt(16, 16, "play", function() 
 
-                    waves[1](g.sm)
+                    waves[1][2](g.sm)
                     g.bc.tryDelete(op)
                 end)
 

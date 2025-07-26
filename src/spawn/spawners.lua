@@ -99,17 +99,24 @@ function g.initSpawners(ss)
 
         local d = false -- has died yet
         local s = false -- has spawned yet
+        local ni -- next index
 
         return ss.new.SpawnCond(
 
             function(self, sm, dt)
 
                 if not s then 
-
+                    
+                    ni = sm.i
                     c = ss.spawn(i, x)
 
                     -- on delete, fulfill condition
-                    local f = function () d = true end
+                    local f = function () 
+
+                        sm.i = ni
+                        d = true
+                    end
+
                     g.bc.addOnDel(c, f)
 
                     s = true

@@ -228,3 +228,4 @@ custom spawn conditions can be created for custom properties. All currently exis
 	- `nil`: increments the current spawn condition by 1
 - `fail`: a function to be performed on success
 	- `nil`: is ignored on false
+- **parameters**: `self`, `sm`

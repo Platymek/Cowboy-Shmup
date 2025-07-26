@@ -9,7 +9,7 @@ function g.initBandit()
     -- bandit conf
     local c = {
 
-        s = 1, -- startup time
+        s = 0.5, -- startup time
         b = 1.4, -- bullet time
         sp = 12, -- speed
         bsp = 32, -- bullet speed

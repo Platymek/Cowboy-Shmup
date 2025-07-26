@@ -9,6 +9,7 @@ docs contain design and code documentation
 | [Mechanic Breakdown](docs/Mechanic%20Breakdown.md) | discusses the current state of the game's core mechanics |
 | [Prototype Log](docs/Prototype%20Log.md)           | the state and order of prototypes                        |
 | [Initial Concept](docs/Initial%20Concept)          | very barebones... My initial notes for the game's idea   |
+| [Level Design Doc](docs/Level%20Design%20Doc.md)   | describes how the level will be designed                 |
 
 # Build Instructions
 open in [Pico 8](https://www.lexaloffle.com/pico-8.php). Dependencies:
